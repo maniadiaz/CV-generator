@@ -32,6 +32,7 @@ db.Experience = require('./Experience')(sequelize);
 db.Skill = require('./Skill')(sequelize);
 db.Language = require('./Language')(sequelize);
 db.Certification = require('./Certification')(sequelize);
+db.SocialNetwork = require('./SocialNetwork')(sequelize);
 
 // Configurar relaciones
 
@@ -127,6 +128,18 @@ db.Profile.hasMany(db.Certification, {
 });
 
 db.Certification.belongsTo(db.Profile, {
+  foreignKey: 'profile_id',
+  as: 'profile'
+});
+
+// Profile <-> SocialNetwork (1:N)
+db.Profile.hasMany(db.SocialNetwork, {
+  foreignKey: 'profile_id',
+  as: 'socialNetworks',
+  onDelete: 'CASCADE'
+});
+
+db.SocialNetwork.belongsTo(db.Profile, {
   foreignKey: 'profile_id',
   as: 'profile'
 });

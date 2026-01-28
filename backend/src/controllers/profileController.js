@@ -1,4 +1,5 @@
 const profileService = require('../services/profileService');
+const profileCompletionService = require('../services/profileCompletionService');
 const ApiResponse = require('../utils/response');
 const logger = require('../utils/logger');
 
@@ -265,6 +266,32 @@ class ProfileController {
 
     } catch (error) {
       logger.error('Get personal info error:', error);
+
+      if (error.message.includes('not found') || error.message.includes('access denied')) {
+        return ApiResponse.notFound(res, error.message);
+      }
+
+      return ApiResponse.error(res, error.message, 500);
+    }
+  }
+
+  /**
+   * GET /api/profiles/:id/completion
+   * Obtener porcentaje de completitud y secciones faltantes
+   */
+  async getProfileCompletion(req, res) {
+    try {
+      const userId = req.user.id;
+      const profileId = parseInt(req.params.id);
+
+      const completion = await profileCompletionService.getProfileCompletion(profileId, userId);
+
+      return ApiResponse.success(res, {
+        completion
+      }, 'Profile completion retrieved successfully');
+
+    } catch (error) {
+      logger.error('Get profile completion error:', error);
 
       if (error.message.includes('not found') || error.message.includes('access denied')) {
         return ApiResponse.notFound(res, error.message);

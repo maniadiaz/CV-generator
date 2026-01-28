@@ -186,5 +186,197 @@ module.exports = (sequelize) => {
     return this;
   };
 
+  /**
+   * Método de instancia: Calcular porcentaje de completitud
+   * Basado en las secciones completadas del CV
+   */
+  Profile.prototype.calculateCompletionPercentage = async function() {
+    const weights = {
+      personalInfo: 20,  // Información personal (obligatoria)
+      education: 15,     // Al menos 1 educación
+      experience: 20,    // Al menos 1 experiencia
+      skills: 15,        // Al menos 3 skills
+      languages: 10,     // Al menos 1 idioma
+      certifications: 10, // Al menos 1 certificación
+      socialNetworks: 10  // Al menos 2 redes sociales
+    };
+
+    let completionScore = 0;
+
+    // Verificar Personal Info
+    const personalInfo = await sequelize.models.PersonalInfo.findOne({
+      where: { profile_id: this.id }
+    });
+
+    if (personalInfo) {
+      // Verificar campos obligatorios de personalInfo
+      const requiredFields = ['full_name', 'email', 'phone'];
+      const filledRequiredFields = requiredFields.filter(field =>
+        personalInfo[field] && personalInfo[field].trim() !== ''
+      ).length;
+
+      if (filledRequiredFields === requiredFields.length) {
+        completionScore += weights.personalInfo;
+      } else {
+        // Puntaje parcial proporcional
+        completionScore += (filledRequiredFields / requiredFields.length) * weights.personalInfo;
+      }
+    }
+
+    // Verificar Education (al menos 1)
+    const educationCount = await sequelize.models.Education.count({
+      where: { profile_id: this.id }
+    });
+    if (educationCount >= 1) {
+      completionScore += weights.education;
+    }
+
+    // Verificar Experience (al menos 1)
+    const experienceCount = await sequelize.models.Experience.count({
+      where: { profile_id: this.id }
+    });
+    if (experienceCount >= 1) {
+      completionScore += weights.experience;
+    }
+
+    // Verificar Skills (al menos 3)
+    const skillsCount = await sequelize.models.Skill.count({
+      where: { profile_id: this.id }
+    });
+    if (skillsCount >= 3) {
+      completionScore += weights.skills;
+    } else if (skillsCount > 0) {
+      // Puntaje parcial proporcional
+      completionScore += (skillsCount / 3) * weights.skills;
+    }
+
+    // Verificar Languages (al menos 1)
+    const languagesCount = await sequelize.models.Language.count({
+      where: { profile_id: this.id }
+    });
+    if (languagesCount >= 1) {
+      completionScore += weights.languages;
+    }
+
+    // Verificar Certifications (al menos 1)
+    const certificationsCount = await sequelize.models.Certification.count({
+      where: { profile_id: this.id }
+    });
+    if (certificationsCount >= 1) {
+      completionScore += weights.certifications;
+    }
+
+    // Verificar Social Networks (al menos 2)
+    const socialNetworksCount = await sequelize.models.SocialNetwork.count({
+      where: { profile_id: this.id }
+    });
+    if (socialNetworksCount >= 2) {
+      completionScore += weights.socialNetworks;
+    } else if (socialNetworksCount === 1) {
+      // Puntaje parcial
+      completionScore += (1 / 2) * weights.socialNetworks;
+    }
+
+    // Actualizar el campo completion_percentage
+    this.completion_percentage = parseFloat(completionScore.toFixed(2));
+    await this.save();
+
+    return this.completion_percentage;
+  };
+
+  /**
+   * Método de instancia: Obtener secciones faltantes para completitud
+   */
+  Profile.prototype.getMissingSections = async function() {
+    const missing = [];
+
+    // Verificar Personal Info
+    const personalInfo = await sequelize.models.PersonalInfo.findOne({
+      where: { profile_id: this.id }
+    });
+
+    if (!personalInfo || !personalInfo.full_name || !personalInfo.email || !personalInfo.phone) {
+      missing.push({
+        section: 'personalInfo',
+        message: 'Complete la información personal (nombre, email, teléfono)',
+        weight: 20
+      });
+    }
+
+    // Verificar Education
+    const educationCount = await sequelize.models.Education.count({
+      where: { profile_id: this.id }
+    });
+    if (educationCount === 0) {
+      missing.push({
+        section: 'education',
+        message: 'Agregue al menos 1 entrada de educación',
+        weight: 15
+      });
+    }
+
+    // Verificar Experience
+    const experienceCount = await sequelize.models.Experience.count({
+      where: { profile_id: this.id }
+    });
+    if (experienceCount === 0) {
+      missing.push({
+        section: 'experience',
+        message: 'Agregue al menos 1 experiencia laboral',
+        weight: 20
+      });
+    }
+
+    // Verificar Skills
+    const skillsCount = await sequelize.models.Skill.count({
+      where: { profile_id: this.id }
+    });
+    if (skillsCount < 3) {
+      missing.push({
+        section: 'skills',
+        message: `Agregue ${3 - skillsCount} habilidad(es) más (mínimo 3)`,
+        weight: 15
+      });
+    }
+
+    // Verificar Languages
+    const languagesCount = await sequelize.models.Language.count({
+      where: { profile_id: this.id }
+    });
+    if (languagesCount === 0) {
+      missing.push({
+        section: 'languages',
+        message: 'Agregue al menos 1 idioma',
+        weight: 10
+      });
+    }
+
+    // Verificar Certifications
+    const certificationsCount = await sequelize.models.Certification.count({
+      where: { profile_id: this.id }
+    });
+    if (certificationsCount === 0) {
+      missing.push({
+        section: 'certifications',
+        message: 'Agregue al menos 1 certificación',
+        weight: 10
+      });
+    }
+
+    // Verificar Social Networks
+    const socialNetworksCount = await sequelize.models.SocialNetwork.count({
+      where: { profile_id: this.id }
+    });
+    if (socialNetworksCount < 2) {
+      missing.push({
+        section: 'socialNetworks',
+        message: `Agregue ${2 - socialNetworksCount} red(es) social(es) más (mínimo 2)`,
+        weight: 10
+      });
+    }
+
+    return missing;
+  };
+
   return Profile;
 };
