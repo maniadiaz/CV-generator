@@ -13,6 +13,7 @@ router.get('/health', (req, res) => {
 // Rutas principales
 router.use('/auth', require('./auth.routes'));
 router.use('/profiles', require('./profile.routes'));
+router.use('/templates', require('./template.routes'));
 
 // Rutas futuras (se agregarán en fases posteriores)
 // router.use('/users', require('./user.routes'));

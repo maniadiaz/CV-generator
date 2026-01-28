@@ -138,6 +138,38 @@ router.put(
 );
 
 /**
+ * Rutas de plantillas (Template routes)
+ * Importadas desde template.routes.js
+ */
+const templateController = require('../controllers/templateController');
+const { changeTemplateSchema } = require('../validators/templateValidator');
+
+/**
+ * @route   PATCH /api/profiles/:id/template
+ * @desc    Cambiar la plantilla de un perfil
+ * @access  Private
+ */
+router.patch(
+  '/:id/template',
+  authenticate,
+  validateParams(profileIdSchema),
+  validate(changeTemplateSchema),
+  templateController.changeTemplate
+);
+
+/**
+ * @route   GET /api/profiles/:id/preview-html
+ * @desc    Generar preview HTML del CV
+ * @access  Private
+ */
+router.get(
+  '/:id/preview-html',
+  authenticate,
+  validateParams(profileIdSchema),
+  templateController.getPreviewHtml
+);
+
+/**
  * Rutas anidadas: Education, Experience, Skills, Languages, Certifications, Social Networks
  * /api/profiles/:profileId/education
  * /api/profiles/:profileId/experience

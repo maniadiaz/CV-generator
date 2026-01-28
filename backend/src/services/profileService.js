@@ -259,11 +259,14 @@ class ProfileService {
 
   /**
    * Obtener perfil completo con todas las relaciones
+   * Optimizado con eager loading para obtener todo en 1 query
    * @param {number} profileId - ID del perfil
    * @param {number} userId - ID del usuario
-   * @returns {Promise<object>} - Perfil completo
+   * @returns {Promise<object>} - Perfil completo con todas las relaciones
    */
   async getCompleteProfile(profileId, userId) {
+    const { Education, Experience, Skill, Language, Certification, SocialNetwork } = require('../models');
+
     const profile = await Profile.findOne({
       where: {
         id: profileId,
@@ -273,15 +276,52 @@ class ProfileService {
         {
           model: PersonalInfo,
           as: 'personalInfo'
+        },
+        {
+          model: Education,
+          as: 'education',
+          order: [['display_order', 'ASC']],
+          separate: true // Para evitar problemas con order en el include principal
+        },
+        {
+          model: Experience,
+          as: 'experience',
+          order: [['display_order', 'ASC']],
+          separate: true
+        },
+        {
+          model: Skill,
+          as: 'skills',
+          order: [['category', 'ASC'], ['display_order', 'ASC']],
+          separate: true
+        },
+        {
+          model: Language,
+          as: 'languages',
+          order: [['display_order', 'ASC']],
+          separate: true
+        },
+        {
+          model: Certification,
+          as: 'certifications',
+          order: [['display_order', 'ASC']],
+          separate: true
+        },
+        {
+          model: SocialNetwork,
+          as: 'socialNetworks',
+          order: [['display_order', 'ASC']],
+          separate: true
         }
-        // En fases posteriores se agregarán:
-        // Education, Experience, Skills, Languages, Certifications, SocialNetworks
       ]
     });
 
     if (!profile) {
       throw new Error('Profile not found or access denied');
     }
+
+    // Calcular completitud actual antes de devolver
+    await profile.calculateCompletionPercentage();
 
     return profile;
   }
