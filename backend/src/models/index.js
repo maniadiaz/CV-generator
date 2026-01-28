@@ -27,6 +27,11 @@ db.User = require('./User')(sequelize);
 db.Session = require('./Session')(sequelize);
 db.Profile = require('./Profile')(sequelize);
 db.PersonalInfo = require('./PersonalInfo')(sequelize);
+db.Education = require('./Education')(sequelize);
+db.Experience = require('./Experience')(sequelize);
+db.Skill = require('./Skill')(sequelize);
+db.Language = require('./Language')(sequelize);
+db.Certification = require('./Certification')(sequelize);
 
 // Configurar relaciones
 
@@ -62,6 +67,66 @@ db.Profile.hasOne(db.PersonalInfo, {
 });
 
 db.PersonalInfo.belongsTo(db.Profile, {
+  foreignKey: 'profile_id',
+  as: 'profile'
+});
+
+// Profile <-> Education (1:N)
+db.Profile.hasMany(db.Education, {
+  foreignKey: 'profile_id',
+  as: 'education',
+  onDelete: 'CASCADE'
+});
+
+db.Education.belongsTo(db.Profile, {
+  foreignKey: 'profile_id',
+  as: 'profile'
+});
+
+// Profile <-> Experience (1:N)
+db.Profile.hasMany(db.Experience, {
+  foreignKey: 'profile_id',
+  as: 'experience',
+  onDelete: 'CASCADE'
+});
+
+db.Experience.belongsTo(db.Profile, {
+  foreignKey: 'profile_id',
+  as: 'profile'
+});
+
+// Profile <-> Skill (1:N)
+db.Profile.hasMany(db.Skill, {
+  foreignKey: 'profile_id',
+  as: 'skills',
+  onDelete: 'CASCADE'
+});
+
+db.Skill.belongsTo(db.Profile, {
+  foreignKey: 'profile_id',
+  as: 'profile'
+});
+
+// Profile <-> Language (1:N)
+db.Profile.hasMany(db.Language, {
+  foreignKey: 'profile_id',
+  as: 'languages',
+  onDelete: 'CASCADE'
+});
+
+db.Language.belongsTo(db.Profile, {
+  foreignKey: 'profile_id',
+  as: 'profile'
+});
+
+// Profile <-> Certification (1:N)
+db.Profile.hasMany(db.Certification, {
+  foreignKey: 'profile_id',
+  as: 'certifications',
+  onDelete: 'CASCADE'
+});
+
+db.Certification.belongsTo(db.Profile, {
   foreignKey: 'profile_id',
   as: 'profile'
 });

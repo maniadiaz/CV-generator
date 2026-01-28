@@ -125,4 +125,18 @@ router.put(
   profileController.updatePersonalInfo
 );
 
+/**
+ * Rutas anidadas: Education, Experience, Skills, Languages, Certifications
+ * /api/profiles/:profileId/education
+ * /api/profiles/:profileId/experience
+ * /api/profiles/:profileId/skills
+ * /api/profiles/:profileId/languages
+ * /api/profiles/:profileId/certifications
+ */
+router.use('/:profileId/education', require('./education.routes'));
+router.use('/:profileId/experience', require('./experience.routes'));
+router.use('/:profileId/skills', require('./skill.routes'));
+router.use('/:profileId/languages', require('./language.routes'));
+router.use('/:profileId/certifications', require('./certification.routes'));
+
 module.exports = router;

@@ -16,7 +16,12 @@ async function dropTables() {
     // Deshabilitar foreign key checks
     await connection.query('SET FOREIGN_KEY_CHECKS = 0');
 
-    // Eliminar tablas en orden inverso
+    // Eliminar tablas en orden inverso (hijas primero)
+    await connection.query('DROP TABLE IF EXISTS certifications');
+    await connection.query('DROP TABLE IF EXISTS languages');
+    await connection.query('DROP TABLE IF EXISTS skills');
+    await connection.query('DROP TABLE IF EXISTS experience');
+    await connection.query('DROP TABLE IF EXISTS education');
     await connection.query('DROP TABLE IF EXISTS personal_info');
     await connection.query('DROP TABLE IF EXISTS profiles');
     await connection.query('DROP TABLE IF EXISTS sessions');
