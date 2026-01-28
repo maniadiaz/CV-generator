@@ -20,3 +20,5 @@ db.sequelize.authenticate()
     logger.error('❌ Unable to connect to database:', error);
     process.exit(1);
   });
+
+

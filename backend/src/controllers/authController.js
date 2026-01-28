@@ -45,7 +45,7 @@ class AuthController {
       const deviceInfo = {
         ip_address: req.ip || req.connection.remoteAddress,
         user_agent: req.headers['user-agent'],
-        device_type: this.getDeviceType(req.headers['user-agent'])
+        device_type: AuthController.getDeviceType(req.headers['user-agent'])
       };
 
       const result = await authService.login(email, password, deviceInfo);
@@ -229,7 +229,7 @@ class AuthController {
   /**
    * Helper: Detectar tipo de dispositivo desde user agent
    */
-  getDeviceType(userAgent) {
+  static getDeviceType(userAgent) {
     if (!userAgent) return 'desktop';
 
     const ua = userAgent.toLowerCase();

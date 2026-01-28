@@ -12,9 +12,11 @@ router.get('/health', (req, res) => {
 
 // Rutas principales
 router.use('/auth', require('./auth.routes'));
+router.use('/profiles', require('./profile.routes'));
 
 // Rutas futuras (se agregarán en fases posteriores)
-// router.use('/profiles', require('./profile.routes'));
 // router.use('/users', require('./user.routes'));
+// router.use('/education', require('./education.routes'));
+// router.use('/experience', require('./experience.routes'));
 
 module.exports = router;
