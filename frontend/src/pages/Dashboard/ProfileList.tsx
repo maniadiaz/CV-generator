@@ -19,12 +19,12 @@ import {
   DialogActions,
   Chip,
 } from '@mui/material';
+import type { GridProps } from '@mui/material';
 import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
   Visibility as PreviewIcon,
-  Download as DownloadIcon,
 } from '@mui/icons-material';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
@@ -38,7 +38,7 @@ const ProfileList = () => {
   const dispatch = useAppDispatch();
   const { profiles, loading } = useAppSelector((state) => state.profile);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
+  const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
 
   const dateLocale = i18n.language === 'es' ? es : enUS;
 
@@ -50,15 +50,15 @@ const ProfileList = () => {
     navigate('/profiles/new');
   };
 
-  const handleEditProfile = (id: string) => {
+  const handleEditProfile = (id: number) => {
     navigate(`/profiles/${id}/edit`);
   };
 
-  const handlePreviewProfile = (id: string) => {
+  const handlePreviewProfile = (id: number) => {
     navigate(`/profiles/${id}/preview`);
   };
 
-  const handleDeleteClick = (id: string) => {
+  const handleDeleteClick = (id: number) => {
     setProfileToDelete(id);
     setDeleteDialogOpen(true);
   };
@@ -126,15 +126,20 @@ const ProfileList = () => {
       ) : (
         <Grid container spacing={3}>
           {Array.isArray(profiles) && profiles.map((profile) => (
-            <Grid item xs={12} md={6} lg={4} key={profile.id}>
+            <Grid {...({ item: true, xs: 12, md: 6, lg: 4, key: profile.id } as GridProps)}>
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography variant="h6" gutterBottom noWrap>
-                    {profile.name}
-                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+                    <Typography variant="h6" noWrap>
+                      {profile.name}
+                    </Typography>
+                    {profile.is_default && (
+                      <Chip label={t('profile.default')} size="small" color="primary" />
+                    )}
+                  </Box>
 
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    {profile.personalInfo.fullName}
+                    {profile.template}
                   </Typography>
 
                   <Box sx={{ mt: 2, mb: 1 }}>
@@ -143,36 +148,26 @@ const ProfileList = () => {
                         {t('profile.completion')}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {profile.completionPercentage}%
+                        {profile.completion_percentage}%
                       </Typography>
                     </Box>
                     <LinearProgress
                       variant="determinate"
-                      value={profile.completionPercentage}
-                      color={getCompletionColor(profile.completionPercentage)}
+                      value={profile.completion_percentage}
+                      color={getCompletionColor(profile.completion_percentage)}
                     />
                   </Box>
 
-                  <Box sx={{ mt: 2 }}>
+                  <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
                     <Chip
-                      label={`${profile.experience.length} ${t('experience.title')}`}
+                      label={`${profile.download_count} ${t('profile.downloads')}`}
                       size="small"
-                      sx={{ mr: 0.5, mb: 0.5 }}
-                    />
-                    <Chip
-                      label={`${profile.education.length} ${t('education.title')}`}
-                      size="small"
-                      sx={{ mr: 0.5, mb: 0.5 }}
-                    />
-                    <Chip
-                      label={`${profile.skills.length} ${t('skills.title')}`}
-                      size="small"
-                      sx={{ mr: 0.5, mb: 0.5 }}
+                      variant="outlined"
                     />
                   </Box>
 
                   <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
-                    {t('profile.lastUpdated')}: {format(new Date(profile.updatedAt), 'PPp', { locale: dateLocale })}
+                    {t('profile.lastUpdated')}: {format(new Date(profile.updated_at), 'PPp', { locale: dateLocale })}
                   </Typography>
                 </CardContent>
 

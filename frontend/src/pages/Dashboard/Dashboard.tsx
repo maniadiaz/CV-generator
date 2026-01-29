@@ -1,11 +1,9 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
   Container,
   Typography,
-  Grid,
   Card,
   CardContent,
 } from '@mui/material';
@@ -16,10 +14,9 @@ import ProfileList from './ProfileList';
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
-  const { profiles, loading } = useAppSelector((state) => state.profile);
+  const { profiles } = useAppSelector((state) => state.profile);
 
   useEffect(() => {
     dispatch(fetchProfiles());
@@ -27,8 +24,9 @@ const Dashboard = () => {
 
   const totalProfiles = profiles.length;
   const avgCompletion = totalProfiles > 0
-    ? Math.round(profiles.reduce((sum, p) => sum + p.completionPercentage, 0) / totalProfiles)
+    ? Math.round(profiles.reduce((sum, p) => sum + (p.completion_percentage || 0), 0) / totalProfiles)
     : 0;
+  const totalExports = profiles.reduce((sum, p) => sum + (p.download_count || 0), 0);
 
   return (
     <>
@@ -42,8 +40,8 @@ const Dashboard = () => {
           </Typography>
         </Box>
 
-        <Grid container spacing={3} sx={{ mb: 4 }}>
-          <Grid item xs={12} md={4}>
+        <Box sx={{ display: 'flex', gap: 3, mb: 4, flexWrap: 'wrap' }}>
+          <Box sx={{ flex: '1 1 300px', minWidth: 0 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -54,9 +52,9 @@ const Dashboard = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
 
-          <Grid item xs={12} md={4}>
+          <Box sx={{ flex: '1 1 300px', minWidth: 0 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
@@ -67,21 +65,21 @@ const Dashboard = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Box>
 
-          <Grid item xs={12} md={4}>
+          <Box sx={{ flex: '1 1 300px', minWidth: 0 }}>
             <Card>
               <CardContent>
                 <Typography variant="h6" gutterBottom>
                   {t('dashboard.totalExports')}
                 </Typography>
                 <Typography variant="h3" color="primary">
-                  0
+                  {totalExports}
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
-        </Grid>
+          </Box>
+        </Box>
       </Container>
 
       <ProfileList />

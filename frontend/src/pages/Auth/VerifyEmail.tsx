@@ -23,7 +23,7 @@ const VerifyEmail = () => {
   const [verifying, setVerifying] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [countdown, setCountdown] = useState(3);
+  const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
     const verifyEmail = async () => {
