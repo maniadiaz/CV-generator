@@ -27,8 +27,9 @@ const Dashboard = () => {
 
   const totalProfiles = profiles.length;
   const avgCompletion = totalProfiles > 0
-    ? Math.round(profiles.reduce((sum, p) => sum + p.completionPercentage, 0) / totalProfiles)
+    ? Math.round(profiles.reduce((sum, p) => sum + (p.completion_percentage || 0), 0) / totalProfiles)
     : 0;
+  const totalExports = profiles.reduce((sum, p) => sum + (p.download_count || 0), 0);
 
   return (
     <>
@@ -76,7 +77,7 @@ const Dashboard = () => {
                   {t('dashboard.totalExports')}
                 </Typography>
                 <Typography variant="h3" color="primary">
-                  0
+                  {totalExports}
                 </Typography>
               </CardContent>
             </Card>

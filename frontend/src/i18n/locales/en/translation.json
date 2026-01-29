@@ -90,7 +90,12 @@
     "saveSuccess": "Profile saved successfully",
     "saveError": "Error saving profile",
     "deleteSuccess": "Profile deleted successfully",
-    "deleteError": "Error deleting profile"
+    "deleteError": "Error deleting profile",
+    "default": "Default",
+    "downloads": "downloads",
+    "duplicate": "Duplicate",
+    "setDefault": "Set as default",
+    "template": "Template"
   },
   "personalInfo": {
     "title": "Personal Information",
