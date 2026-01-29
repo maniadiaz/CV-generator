@@ -90,12 +90,7 @@
     "saveSuccess": "Perfil guardado exitosamente",
     "saveError": "Error al guardar perfil",
     "deleteSuccess": "Perfil eliminado exitosamente",
-    "deleteError": "Error al eliminar perfil",
-    "default": "Por defecto",
-    "downloads": "descargas",
-    "duplicate": "Duplicar",
-    "setDefault": "Establecer como predeterminado",
-    "template": "Plantilla"
+    "deleteError": "Error al eliminar perfil"
   },
   "personalInfo": {
     "title": "Información Personal",

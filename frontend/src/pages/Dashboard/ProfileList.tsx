@@ -38,7 +38,7 @@ const ProfileList = () => {
   const dispatch = useAppDispatch();
   const { profiles, loading } = useAppSelector((state) => state.profile);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
+  const [profileToDelete, setProfileToDelete] = useState<string | null>(null);
 
   const dateLocale = i18n.language === 'es' ? es : enUS;
 
@@ -50,15 +50,15 @@ const ProfileList = () => {
     navigate('/profiles/new');
   };
 
-  const handleEditProfile = (id: number) => {
+  const handleEditProfile = (id: string) => {
     navigate(`/profiles/${id}/edit`);
   };
 
-  const handlePreviewProfile = (id: number) => {
+  const handlePreviewProfile = (id: string) => {
     navigate(`/profiles/${id}/preview`);
   };
 
-  const handleDeleteClick = (id: number) => {
+  const handleDeleteClick = (id: string) => {
     setProfileToDelete(id);
     setDeleteDialogOpen(true);
   };
@@ -129,17 +129,12 @@ const ProfileList = () => {
             <Grid item xs={12} md={6} lg={4} key={profile.id}>
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flexGrow: 1 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                    <Typography variant="h6" noWrap>
-                      {profile.name}
-                    </Typography>
-                    {profile.is_default && (
-                      <Chip label={t('profile.default')} size="small" color="primary" />
-                    )}
-                  </Box>
+                  <Typography variant="h6" gutterBottom noWrap>
+                    {profile.name}
+                  </Typography>
 
                   <Typography variant="body2" color="text.secondary" gutterBottom>
-                    {profile.template}
+                    {profile.personalInfo.fullName}
                   </Typography>
 
                   <Box sx={{ mt: 2, mb: 1 }}>
@@ -148,26 +143,36 @@ const ProfileList = () => {
                         {t('profile.completion')}
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {profile.completion_percentage}%
+                        {profile.completionPercentage}%
                       </Typography>
                     </Box>
                     <LinearProgress
                       variant="determinate"
-                      value={profile.completion_percentage}
-                      color={getCompletionColor(profile.completion_percentage)}
+                      value={profile.completionPercentage}
+                      color={getCompletionColor(profile.completionPercentage)}
                     />
                   </Box>
 
-                  <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
+                  <Box sx={{ mt: 2 }}>
                     <Chip
-                      label={`${profile.download_count} ${t('profile.downloads')}`}
+                      label={`${profile.experience.length} ${t('experience.title')}`}
                       size="small"
-                      variant="outlined"
+                      sx={{ mr: 0.5, mb: 0.5 }}
+                    />
+                    <Chip
+                      label={`${profile.education.length} ${t('education.title')}`}
+                      size="small"
+                      sx={{ mr: 0.5, mb: 0.5 }}
+                    />
+                    <Chip
+                      label={`${profile.skills.length} ${t('skills.title')}`}
+                      size="small"
+                      sx={{ mr: 0.5, mb: 0.5 }}
                     />
                   </Box>
 
                   <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
-                    {t('profile.lastUpdated')}: {format(new Date(profile.updated_at), 'PPp', { locale: dateLocale })}
+                    {t('profile.lastUpdated')}: {format(new Date(profile.updatedAt), 'PPp', { locale: dateLocale })}
                   </Typography>
                 </CardContent>
 

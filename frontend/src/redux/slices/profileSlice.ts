@@ -1,14 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
-import type { CVProfile, ProfileState } from '@app-types/index';
-import { profileService } from '@api/profileService';
+import type { CVProfile } from '@app-types/index';
+import api from '@api/axios';
+
+interface ProfileState {
+  profiles: CVProfile[];
+  currentProfile: CVProfile | null;
+  loading: boolean;
+  error: string | null;
+  saving: boolean;
+}
 
 const initialState: ProfileState = {
   profiles: [],
   currentProfile: null,
   loading: false,
   error: null,
-  stats: null,
+  saving: false,
 };
 
 // Async thunks
@@ -16,8 +24,8 @@ export const fetchProfiles = createAsyncThunk(
   'profile/fetchProfiles',
   async (_, { rejectWithValue }) => {
     try {
-      const profiles = await profileService.getProfiles();
-      return profiles;
+      const response = await api.get('/api/profiles');
+      return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Error al cargar perfiles');
     }
@@ -26,10 +34,10 @@ export const fetchProfiles = createAsyncThunk(
 
 export const fetchProfileById = createAsyncThunk(
   'profile/fetchProfileById',
-  async (id: number, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
-      const profile = await profileService.getProfileById(id);
-      return profile;
+      const response = await api.get(`/api/profiles/${id}`);
+      return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Error al cargar perfil');
     }
@@ -38,10 +46,10 @@ export const fetchProfileById = createAsyncThunk(
 
 export const createProfile = createAsyncThunk(
   'profile/createProfile',
-  async (data: { name: string; template?: string }, { rejectWithValue }) => {
+  async (profile: Partial<CVProfile>, { rejectWithValue }) => {
     try {
-      const profile = await profileService.createProfile(data);
-      return profile;
+      const response = await api.post('/api/profiles', profile);
+      return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Error al crear perfil');
     }
@@ -50,10 +58,10 @@ export const createProfile = createAsyncThunk(
 
 export const updateProfile = createAsyncThunk(
   'profile/updateProfile',
-  async ({ id, data }: { id: number; data: { name: string } }, { rejectWithValue }) => {
+  async ({ id, data }: { id: string; data: Partial<CVProfile> }, { rejectWithValue }) => {
     try {
-      const profile = await profileService.updateProfile(id, data);
-      return profile;
+      const response = await api.put(`/api/profiles/${id}`, data);
+      return response.data.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Error al actualizar perfil');
     }
@@ -62,60 +70,12 @@ export const updateProfile = createAsyncThunk(
 
 export const deleteProfile = createAsyncThunk(
   'profile/deleteProfile',
-  async (id: number, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
-      await profileService.deleteProfile(id);
+      await api.delete(`/api/profiles/${id}`);
       return id;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Error al eliminar perfil');
-    }
-  }
-);
-
-export const setDefaultProfile = createAsyncThunk(
-  'profile/setDefaultProfile',
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const profile = await profileService.setDefault(id);
-      return profile;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Error al establecer perfil por defecto');
-    }
-  }
-);
-
-export const duplicateProfile = createAsyncThunk(
-  'profile/duplicateProfile',
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const profile = await profileService.duplicateProfile(id);
-      return profile;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Error al duplicar perfil');
-    }
-  }
-);
-
-export const fetchCompleteProfile = createAsyncThunk(
-  'profile/fetchCompleteProfile',
-  async (id: number, { rejectWithValue }) => {
-    try {
-      const profile = await profileService.getCompleteProfile(id);
-      return profile;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Error al cargar perfil completo');
-    }
-  }
-);
-
-export const fetchProfileStats = createAsyncThunk(
-  'profile/fetchProfileStats',
-  async (_, { rejectWithValue }) => {
-    try {
-      const stats = await profileService.getStats();
-      return stats;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Error al cargar estadísticas');
     }
   }
 );
@@ -171,37 +131,35 @@ const profileSlice = createSlice({
     // Create profile
     builder
       .addCase(createProfile.pending, (state) => {
-        state.loading = true;
+        state.saving = true;
         state.error = null;
       })
       .addCase(createProfile.fulfilled, (state, action: PayloadAction<CVProfile>) => {
-        state.loading = false;
+        state.saving = false;
         state.profiles.push(action.payload);
         state.currentProfile = action.payload;
       })
       .addCase(createProfile.rejected, (state, action) => {
-        state.loading = false;
+        state.saving = false;
         state.error = action.payload as string;
       });
 
     // Update profile
     builder
       .addCase(updateProfile.pending, (state) => {
-        state.loading = true;
+        state.saving = true;
         state.error = null;
       })
       .addCase(updateProfile.fulfilled, (state, action: PayloadAction<CVProfile>) => {
-        state.loading = false;
+        state.saving = false;
         const index = state.profiles.findIndex((p) => p.id === action.payload.id);
         if (index !== -1) {
           state.profiles[index] = action.payload;
         }
-        if (state.currentProfile?.id === action.payload.id) {
-          state.currentProfile = action.payload;
-        }
+        state.currentProfile = action.payload;
       })
       .addCase(updateProfile.rejected, (state, action) => {
-        state.loading = false;
+        state.saving = false;
         state.error = action.payload as string;
       });
 
@@ -211,7 +169,7 @@ const profileSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(deleteProfile.fulfilled, (state, action: PayloadAction<number>) => {
+      .addCase(deleteProfile.fulfilled, (state, action: PayloadAction<string>) => {
         state.loading = false;
         state.profiles = state.profiles.filter((p) => p.id !== action.payload);
         if (state.currentProfile?.id === action.payload) {
@@ -219,73 +177,6 @@ const profileSlice = createSlice({
         }
       })
       .addCase(deleteProfile.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // Set default profile
-    builder
-      .addCase(setDefaultProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(setDefaultProfile.fulfilled, (state, action: PayloadAction<CVProfile>) => {
-        state.loading = false;
-        // Update all profiles to set is_default to false except the one being set as default
-        state.profiles = state.profiles.map((p) => ({
-          ...p,
-          is_default: p.id === action.payload.id,
-        }));
-        if (state.currentProfile?.id === action.payload.id) {
-          state.currentProfile = action.payload;
-        }
-      })
-      .addCase(setDefaultProfile.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // Duplicate profile
-    builder
-      .addCase(duplicateProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(duplicateProfile.fulfilled, (state, action: PayloadAction<CVProfile>) => {
-        state.loading = false;
-        state.profiles.push(action.payload);
-      })
-      .addCase(duplicateProfile.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // Fetch complete profile
-    builder
-      .addCase(fetchCompleteProfile.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchCompleteProfile.fulfilled, (state, action: PayloadAction<CVProfile>) => {
-        state.loading = false;
-        state.currentProfile = action.payload;
-      })
-      .addCase(fetchCompleteProfile.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-
-    // Fetch profile stats
-    builder
-      .addCase(fetchProfileStats.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchProfileStats.fulfilled, (state, action) => {
-        state.loading = false;
-        state.stats = action.payload;
-      })
-      .addCase(fetchProfileStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

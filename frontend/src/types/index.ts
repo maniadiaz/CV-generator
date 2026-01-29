@@ -107,36 +107,19 @@ export interface Project {
 }
 
 export interface CVProfile {
-  id: number;
-  user_id: number;
+  id: string;
+  userId: string;
   name: string;
-  slug: string;
-  template: string;
-  is_default: boolean;
-  completion_percentage: number;
-  download_count: number;
-  last_exported_at: string | null;
-  created_at: string;
-  updated_at: string;
-  personalInfo?: PersonalInfo;
-  experience?: Experience[];
-  education?: Education[];
-  skills?: Skill[];
-  languages?: Language[];
-  certificates?: Certificate[];
-  projects?: Project[];
-}
-
-export interface ProfileState {
-  profiles: CVProfile[];
-  currentProfile: CVProfile | null;
-  loading: boolean;
-  error: string | null;
-  stats: {
-    total: number;
-    default_profile_id: number | null;
-    most_downloaded: CVProfile | null;
-  } | null;
+  personalInfo: PersonalInfo;
+  experience: Experience[];
+  education: Education[];
+  skills: Skill[];
+  languages: Language[];
+  certificates: Certificate[];
+  projects: Project[];
+  completionPercentage: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Theme Types
