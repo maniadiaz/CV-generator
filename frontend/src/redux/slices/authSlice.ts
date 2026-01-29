@@ -1,0 +1,147 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { AuthState, User, LoginCredentials, RegisterData } from '@app-types/index';
+import { authService } from '@api/authService';
+
+const token = localStorage.getItem('token');
+
+const initialState: AuthState = {
+  user: null,
+  token: token,
+  isAuthenticated: !!token, // Set to true if token exists
+  loading: !!token, // Set to true if token exists to wait for checkAuth
+  error: null,
+};
+
+// Async thunks
+export const login = createAsyncThunk(
+  'auth/login',
+  async (credentials: LoginCredentials, { rejectWithValue }) => {
+    try {
+      const { accessToken, refreshToken, user } = await authService.login(credentials);
+      localStorage.setItem('token', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      return { token: accessToken, user };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Error al iniciar sesión');
+    }
+  }
+);
+
+export const register = createAsyncThunk(
+  'auth/register',
+  async (data: RegisterData, { rejectWithValue }) => {
+    try {
+      console.log('📤 Sending registration data:', data);
+      const { accessToken, refreshToken, user } = await authService.register(data);
+      console.log('✅ Registration response:', { accessToken, user });
+      localStorage.setItem('token', accessToken);
+      localStorage.setItem('refreshToken', refreshToken);
+      return { token: accessToken, user };
+    } catch (error: any) {
+      console.error('❌ Registration error:', error.response?.data);
+      return rejectWithValue(error.response?.data?.message || 'Error al registrarse');
+    }
+  }
+);
+
+export const logout = createAsyncThunk('auth/logout', async () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshToken');
+});
+
+export const checkAuth = createAsyncThunk(
+  'auth/checkAuth',
+  async (_, { rejectWithValue }) => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        return rejectWithValue('No token found');
+      }
+      const user = await authService.checkAuth();
+      return user;
+    } catch (error: any) {
+      localStorage.removeItem('token');
+      return rejectWithValue(error.response?.data?.message || 'Error al verificar autenticación');
+    }
+  }
+);
+
+const authSlice = createSlice({
+  name: 'auth',
+  initialState,
+  reducers: {
+    clearError: (state) => {
+      state.error = null;
+    },
+  },
+  extraReducers: (builder) => {
+    // Login
+    builder
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(login.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.error = null;
+      })
+      .addCase(login.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.error = action.payload as string;
+      });
+
+    // Register
+    builder
+      .addCase(register.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(register.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.token = action.payload.token;
+        state.user = action.payload.user;
+        state.error = null;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.error = action.payload as string;
+      });
+
+    // Logout
+    builder.addCase(logout.fulfilled, (state) => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+      state.loading = false;
+      state.error = null;
+    });
+
+    // Check Auth
+    builder
+      .addCase(checkAuth.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(checkAuth.fulfilled, (state, action: PayloadAction<User>) => {
+        state.loading = false;
+        state.isAuthenticated = true;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(checkAuth.rejected, (state) => {
+        state.loading = false;
+        state.isAuthenticated = false;
+        state.user = null;
+        state.token = null;
+      });
+  },
+});
+
+export const { clearError } = authSlice.actions;
+export default authSlice.reducer;
