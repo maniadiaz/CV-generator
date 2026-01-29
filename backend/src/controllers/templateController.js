@@ -561,4 +561,9 @@ class TemplateController {
   }
 }
 
-module.exports = new TemplateController();
+// Exportar instancia para endpoints
+const instance = new TemplateController();
+
+// Exportar también la clase para acceder a métodos estáticos
+module.exports = instance;
+module.exports.TemplateController = TemplateController;

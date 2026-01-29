@@ -170,13 +170,14 @@ router.get(
 );
 
 /**
- * Rutas anidadas: Education, Experience, Skills, Languages, Certifications, Social Networks
+ * Rutas anidadas: Education, Experience, Skills, Languages, Certifications, Social Networks, PDF
  * /api/profiles/:profileId/education
  * /api/profiles/:profileId/experience
  * /api/profiles/:profileId/skills
  * /api/profiles/:profileId/languages
  * /api/profiles/:profileId/certifications
  * /api/profiles/:profileId/social-networks
+ * /api/profiles/:profileId/pdf
  */
 router.use('/:profileId/education', require('./education.routes'));
 router.use('/:profileId/experience', require('./experience.routes'));
@@ -184,5 +185,6 @@ router.use('/:profileId/skills', require('./skill.routes'));
 router.use('/:profileId/languages', require('./language.routes'));
 router.use('/:profileId/certifications', require('./certification.routes'));
 router.use('/:profileId/social-networks', require('./socialNetwork.routes'));
+router.use('/:profileId/pdf', require('./pdf.routes'));
 
 module.exports = router;
