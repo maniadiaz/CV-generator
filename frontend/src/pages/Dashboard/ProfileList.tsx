@@ -31,6 +31,7 @@ import { useAppDispatch } from '@hooks/useAppDispatch';
 import { fetchProfiles, deleteProfile } from '@redux/slices/profileSlice';
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
+import CreateProfileDialog from '@components/profile/CreateProfileDialog';
 
 const ProfileList = () => {
   const { t, i18n } = useTranslation();
@@ -39,6 +40,7 @@ const ProfileList = () => {
   const { profiles, loading } = useAppSelector((state) => state.profile);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   const dateLocale = i18n.language === 'es' ? es : enUS;
 
@@ -47,7 +49,11 @@ const ProfileList = () => {
   }, [dispatch]);
 
   const handleCreateProfile = () => {
-    navigate('/profiles/new');
+    setCreateDialogOpen(true);
+  };
+
+  const handleCloseCreateDialog = () => {
+    setCreateDialogOpen(false);
   };
 
   const handleEditProfile = (id: number) => {
@@ -206,6 +212,11 @@ const ProfileList = () => {
           ))}
         </Grid>
       )}
+
+      <CreateProfileDialog
+        open={createDialogOpen}
+        onClose={handleCloseCreateDialog}
+      />
 
       <Dialog
         open={deleteDialogOpen}

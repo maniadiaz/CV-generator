@@ -6,6 +6,7 @@
     "save": "Guardar",
     "delete": "Eliminar",
     "edit": "Editar",
+    "create": "Crear",
     "loading": "Cargando...",
     "error": "Error",
     "success": "Éxito",
@@ -76,11 +77,16 @@
   "profile": {
     "title": "Perfil",
     "newProfile": "Nuevo Perfil",
+    "createNewProfile": "Crear Nuevo Perfil",
     "editProfile": "Editar Perfil",
     "deleteProfile": "Eliminar Perfil",
     "deleteConfirm": "¿Estás seguro de eliminar este perfil?",
     "profileName": "Nombre del perfil",
     "profileNamePlaceholder": "Ej: CV para Desarrollador Frontend",
+    "profileNameRequired": "El nombre del perfil es requerido",
+    "profileNameMin": "El nombre debe tener al menos 3 caracteres",
+    "selectTemplate": "Seleccionar plantilla",
+    "templateRequired": "Debes seleccionar una plantilla",
     "completion": "Completitud",
     "lastUpdated": "Última actualización",
     "createdAt": "Creado el",
@@ -89,8 +95,20 @@
     "preview": "Vista previa",
     "saveSuccess": "Perfil guardado exitosamente",
     "saveError": "Error al guardar perfil",
+    "createError": "Error al crear perfil",
     "deleteSuccess": "Perfil eliminado exitosamente",
-    "deleteError": "Error al eliminar perfil"
+    "deleteError": "Error al eliminar perfil",
+    "default": "Por defecto",
+    "downloads": "descargas",
+    "duplicate": "Duplicar",
+    "setDefault": "Establecer como predeterminado",
+    "template": "Plantilla",
+    "templates": {
+      "harvardClassic": "Harvard Clásico",
+      "harvardClassicDesc": "Diseño tradicional y profesional, ideal para sectores conservadores",
+      "harvardModern": "Harvard Moderno",
+      "harvardModernDesc": "Diseño contemporáneo con un toque elegante, perfecto para empresas modernas"
+    }
   },
   "personalInfo": {
     "title": "Información Personal",

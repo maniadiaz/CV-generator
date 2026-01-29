@@ -6,6 +6,7 @@
     "save": "Save",
     "delete": "Delete",
     "edit": "Edit",
+    "create": "Create",
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
@@ -76,11 +77,16 @@
   "profile": {
     "title": "Profile",
     "newProfile": "New Profile",
+    "createNewProfile": "Create New Profile",
     "editProfile": "Edit Profile",
     "deleteProfile": "Delete Profile",
     "deleteConfirm": "Are you sure you want to delete this profile?",
     "profileName": "Profile name",
     "profileNamePlaceholder": "E.g.: CV for Frontend Developer",
+    "profileNameRequired": "Profile name is required",
+    "profileNameMin": "Name must be at least 3 characters",
+    "selectTemplate": "Select template",
+    "templateRequired": "You must select a template",
     "completion": "Completion",
     "lastUpdated": "Last updated",
     "createdAt": "Created on",
@@ -89,8 +95,20 @@
     "preview": "Preview",
     "saveSuccess": "Profile saved successfully",
     "saveError": "Error saving profile",
+    "createError": "Error creating profile",
     "deleteSuccess": "Profile deleted successfully",
-    "deleteError": "Error deleting profile"
+    "deleteError": "Error deleting profile",
+    "default": "Default",
+    "downloads": "downloads",
+    "duplicate": "Duplicate",
+    "setDefault": "Set as default",
+    "template": "Template",
+    "templates": {
+      "harvardClassic": "Harvard Classic",
+      "harvardClassicDesc": "Traditional and professional design, ideal for conservative sectors",
+      "harvardModern": "Harvard Modern",
+      "harvardModernDesc": "Contemporary design with an elegant touch, perfect for modern companies"
+    }
   },
   "personalInfo": {
     "title": "Personal Information",
