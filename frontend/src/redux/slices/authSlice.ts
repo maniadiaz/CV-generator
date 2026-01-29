@@ -33,11 +33,10 @@ export const register = createAsyncThunk(
   async (data: RegisterData, { rejectWithValue }) => {
     try {
       console.log('📤 Sending registration data:', data);
-      const { accessToken, refreshToken, user } = await authService.register(data);
-      console.log('✅ Registration response:', { accessToken, user });
-      localStorage.setItem('token', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      return { token: accessToken, user };
+      const response = await authService.register(data);
+      console.log('✅ Registration response:', response);
+      // DO NOT save tokens on registration - user needs to verify email first
+      return response.user;
     } catch (error: any) {
       console.error('❌ Registration error:', error.response?.data);
       return rejectWithValue(error.response?.data?.message || 'Error al registrarse');
@@ -95,17 +94,17 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    // Register
+    // Register - DO NOT authenticate, user needs to verify email
     builder
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(register.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
+      .addCase(register.fulfilled, (state) => {
         state.loading = false;
-        state.isAuthenticated = true;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.isAuthenticated = false;
+        state.token = null;
+        state.user = null;
         state.error = null;
       })
       .addCase(register.rejected, (state, action) => {

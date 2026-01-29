@@ -7,6 +7,10 @@ interface AuthResponse {
   user: User;
 }
 
+interface RegisterResponse {
+  user: User;
+}
+
 export const authService = {
   // Login
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
@@ -14,9 +18,9 @@ export const authService = {
     return response.data.data;
   },
 
-  // Register
-  register: async (data: RegisterData): Promise<AuthResponse> => {
-    const response = await api.post<ApiResponse<AuthResponse>>('/api/auth/register', data);
+  // Register - returns only user, no tokens (user must verify email first)
+  register: async (data: RegisterData): Promise<RegisterResponse> => {
+    const response = await api.post<ApiResponse<RegisterResponse>>('/api/auth/register', data);
     return response.data.data;
   },
 
