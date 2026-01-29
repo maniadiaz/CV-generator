@@ -60,6 +60,11 @@ class AuthService {
       throw new Error('Account is deactivated. Please contact support.');
     }
 
+    // Verificar si el email está verificado
+    if (!user.is_verified) {
+      throw new Error('Email not verified');
+    }
+
     // Verificar si la cuenta está bloqueada
     if (user.isLocked()) {
       const minutesLeft = Math.ceil((user.locked_until - new Date()) / 1000 / 60);

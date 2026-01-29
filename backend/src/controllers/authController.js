@@ -63,6 +63,10 @@ class AuthController {
         return ApiResponse.unauthorized(res, 'Invalid email or password');
       }
 
+      if (error.message === 'Email not verified') {
+        return ApiResponse.forbidden(res, 'Please verify your email before logging in. Check your inbox for the verification link.');
+      }
+
       if (error.message.includes('Account locked')) {
         return ApiResponse.forbidden(res, error.message);
       }
