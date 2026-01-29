@@ -2,6 +2,7 @@
 export interface User {
   id: number;
   email: string;
+  name: string;
   first_name: string;
   last_name: string;
   avatar_url: string | null;
@@ -39,36 +40,41 @@ export interface AuthState {
 
 // Profile Types
 export interface PersonalInfo {
-  fullName: string;
+  id?: number;
+  full_name: string;
   email: string;
   phone: string;
   location: string;
-  linkedin?: string;
-  github?: string;
-  website?: string;
-  summary: string;
+  professional_title?: string;
+  summary?: string;
 }
 
 export interface Experience {
-  id: string;
-  company: string;
+  id: number;
+  project_title: string;
   position: string;
-  startDate: string;
-  endDate?: string;
-  current: boolean;
-  description: string;
-  achievements: string[];
+  company: string;
+  start_date: string;
+  end_date?: string;
+  is_current: boolean;
+  achievements?: string;
+  technologies?: string;
+  is_visible?: boolean;
+  display_order?: number;
 }
 
 export interface Education {
-  id: string;
+  id: number;
   institution: string;
   degree: string;
-  field: string;
-  startDate: string;
-  endDate?: string;
-  current: boolean;
+  field_of_study: string;
+  start_date: string;
+  end_date?: string;
+  is_current: boolean;
+  gpa?: string;
   description?: string;
+  is_visible?: boolean;
+  display_order?: number;
 }
 
 export interface Skill {

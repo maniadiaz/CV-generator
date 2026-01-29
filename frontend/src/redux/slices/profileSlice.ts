@@ -120,6 +120,18 @@ export const fetchProfileStats = createAsyncThunk(
   }
 );
 
+export const updateProfileCompletion = createAsyncThunk(
+  'profile/updateProfileCompletion',
+  async (id: number, { rejectWithValue }) => {
+    try {
+      const completion = await profileService.getCompletion(id);
+      return { id, completion_percentage: completion.completion_percentage };
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Error al actualizar completitud');
+    }
+  }
+);
+
 const profileSlice = createSlice({
   name: 'profile',
   initialState,
@@ -288,6 +300,14 @@ const profileSlice = createSlice({
       .addCase(fetchProfileStats.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
+      });
+
+    // Update profile completion (no loading state to avoid flickering)
+    builder
+      .addCase(updateProfileCompletion.fulfilled, (state, action) => {
+        if (state.currentProfile && state.currentProfile.id === action.payload.id) {
+          state.currentProfile.completion_percentage = action.payload.completion_percentage;
+        }
       });
   },
 });

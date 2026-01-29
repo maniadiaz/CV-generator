@@ -19,7 +19,6 @@ import {
   DialogActions,
   Chip,
 } from '@mui/material';
-import type { GridProps } from '@mui/material';
 import {
   Add as AddIcon,
   Edit as EditIcon,
@@ -132,7 +131,7 @@ const ProfileList = () => {
       ) : (
         <Grid container spacing={3}>
           {Array.isArray(profiles) && profiles.map((profile) => (
-            <Grid {...({ item: true, xs: 12, md: 6, lg: 4, key: profile.id } as GridProps)}>
+            <Grid key={profile.id} size={{ xs: 12, md: 6, lg: 4 }}>
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>

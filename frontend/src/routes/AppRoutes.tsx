@@ -5,6 +5,7 @@ import VerifyEmail from '@pages/Auth/VerifyEmail';
 import ForgotPassword from '@pages/Auth/ForgotPassword';
 import ResetPassword from '@pages/Auth/ResetPassword';
 import Dashboard from '@pages/Dashboard/Dashboard';
+import ProfileEdit from '@pages/CVEditor/ProfileEdit';
 import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '@components/layout/MainLayout';
 
@@ -25,6 +26,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <MainLayout>
               <Dashboard />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/edit"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <ProfileEdit />
             </MainLayout>
           </ProtectedRoute>
         }

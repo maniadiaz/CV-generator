@@ -4,9 +4,20 @@ import type { AuthState, User, LoginCredentials, RegisterData } from '@app-types
 import { authService } from '@api/authService';
 
 const token = localStorage.getItem('token');
+const userStr = localStorage.getItem('user');
+let userData: User | null = null;
+
+if (userStr) {
+  try {
+    userData = JSON.parse(userStr);
+  } catch (e) {
+    console.error('Error parsing user data from localStorage', e);
+    localStorage.removeItem('user');
+  }
+}
 
 const initialState: AuthState = {
-  user: null,
+  user: userData,
   token: token,
   isAuthenticated: !!token, // Set to true if token exists
   loading: !!token, // Set to true if token exists to wait for checkAuth
@@ -21,6 +32,7 @@ export const login = createAsyncThunk(
       const { accessToken, refreshToken, user } = await authService.login(credentials);
       localStorage.setItem('token', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(user));
       return { token: accessToken, user };
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Error al iniciar sesión');
@@ -48,6 +60,7 @@ export const register = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async () => {
   localStorage.removeItem('token');
   localStorage.removeItem('refreshToken');
+  localStorage.removeItem('user');
 });
 
 export const checkAuth = createAsyncThunk(
@@ -59,9 +72,12 @@ export const checkAuth = createAsyncThunk(
         return rejectWithValue('No token found');
       }
       const user = await authService.checkAuth();
+      localStorage.setItem('user', JSON.stringify(user));
       return user;
     } catch (error: any) {
       localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('user');
       return rejectWithValue(error.response?.data?.message || 'Error al verificar autenticación');
     }
   }
