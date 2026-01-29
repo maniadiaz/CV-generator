@@ -75,7 +75,7 @@ class TemplateController {
       const templateMetadata = await templateService.getTemplateMetadata(profile.template);
 
       // Generar HTML básico del CV según la plantilla
-      const html = this.generateHtmlPreview(profile, templateMetadata);
+      const html = TemplateController.generateHtmlPreview(profile, templateMetadata);
 
       return ApiResponse.success(res, {
         html,
@@ -98,7 +98,7 @@ class TemplateController {
    * Generar HTML básico del CV según la plantilla
    * @private
    */
-  generateHtmlPreview(profile, templateMetadata) {
+  static generateHtmlPreview(profile, templateMetadata) {
     const personalInfo = profile.personalInfo || {};
     const education = profile.education || [];
     const experience = profile.experience || [];
@@ -109,10 +109,10 @@ class TemplateController {
 
     // Generar HTML según la plantilla
     if (profile.template === 'harvard_modern') {
-      return this.generateHarvardModernHtml(profile, personalInfo, education, experience, skills, languages, certifications, socialNetworks, templateMetadata);
+      return TemplateController.generateHarvardModernHtml(profile, personalInfo, education, experience, skills, languages, certifications, socialNetworks, templateMetadata);
     } else {
       // harvard_classic por defecto
-      return this.generateHarvardClassicHtml(profile, personalInfo, education, experience, skills, languages, certifications, socialNetworks, templateMetadata);
+      return TemplateController.generateHarvardClassicHtml(profile, personalInfo, education, experience, skills, languages, certifications, socialNetworks, templateMetadata);
     }
   }
 
@@ -120,7 +120,7 @@ class TemplateController {
    * Generar HTML para Harvard Classic
    * @private
    */
-  generateHarvardClassicHtml(profile, personalInfo, education, experience, skills, languages, certifications, socialNetworks, templateMetadata) {
+  static generateHarvardClassicHtml(profile, personalInfo, education, experience, skills, languages, certifications, socialNetworks, templateMetadata) {
     const { colors } = templateMetadata;
 
     return `
@@ -248,7 +248,7 @@ class TemplateController {
                     <div class="entry-subtitle">${exp.company}${exp.location ? `, ${exp.location}` : ''}</div>
                 </div>
                 <div class="entry-date">
-                    ${this.formatDate(exp.start_date)} - ${exp.is_current ? 'Presente' : this.formatDate(exp.end_date)}
+                    ${TemplateController.formatDate(exp.start_date)} - ${exp.is_current ? 'Presente' : TemplateController.formatDate(exp.end_date)}
                 </div>
             </div>
             ${exp.description ? `<p class="description">${exp.description}</p>` : ''}
@@ -268,7 +268,7 @@ class TemplateController {
                     <div class="entry-subtitle">${edu.institution}${edu.location ? `, ${edu.location}` : ''}</div>
                 </div>
                 <div class="entry-date">
-                    ${this.formatDate(edu.start_date)} - ${edu.is_current ? 'Presente' : this.formatDate(edu.end_date)}
+                    ${TemplateController.formatDate(edu.start_date)} - ${edu.is_current ? 'Presente' : TemplateController.formatDate(edu.end_date)}
                 </div>
             </div>
             ${edu.grade ? `<div>Calificación: ${edu.grade}</div>` : ''}
@@ -298,7 +298,7 @@ class TemplateController {
         ${certifications.map(cert => `
         <div class="entry">
             <h3 class="entry-title">${cert.name}</h3>
-            <div class="entry-subtitle">${cert.issuing_organization}${cert.issue_date ? ` - ${this.formatDate(cert.issue_date)}` : ''}</div>
+            <div class="entry-subtitle">${cert.issuing_organization}${cert.issue_date ? ` - ${TemplateController.formatDate(cert.issue_date)}` : ''}</div>
             ${cert.credential_id ? `<div>ID: ${cert.credential_id}</div>` : ''}
         </div>
         `).join('')}
@@ -324,7 +324,7 @@ class TemplateController {
    * Generar HTML para Harvard Modern
    * @private
    */
-  generateHarvardModernHtml(profile, personalInfo, education, experience, skills, languages, certifications, socialNetworks, templateMetadata) {
+  static generateHarvardModernHtml(profile, personalInfo, education, experience, skills, languages, certifications, socialNetworks, templateMetadata) {
     const { colors } = templateMetadata;
 
     return `
@@ -476,7 +476,7 @@ class TemplateController {
                         <div class="entry-subtitle">${exp.company}${exp.location ? `, ${exp.location}` : ''}</div>
                     </div>
                     <div class="entry-date">
-                        ${this.formatDate(exp.start_date)} - ${exp.is_current ? 'Presente' : this.formatDate(exp.end_date)}
+                        ${TemplateController.formatDate(exp.start_date)} - ${exp.is_current ? 'Presente' : TemplateController.formatDate(exp.end_date)}
                     </div>
                 </div>
                 ${exp.description ? `<p class="description">${exp.description}</p>` : ''}
@@ -496,7 +496,7 @@ class TemplateController {
                         <div class="entry-subtitle">${edu.institution}${edu.location ? `, ${edu.location}` : ''}</div>
                     </div>
                     <div class="entry-date">
-                        ${this.formatDate(edu.start_date)} - ${edu.is_current ? 'Presente' : this.formatDate(edu.end_date)}
+                        ${TemplateController.formatDate(edu.start_date)} - ${edu.is_current ? 'Presente' : TemplateController.formatDate(edu.end_date)}
                     </div>
                 </div>
                 ${edu.grade ? `<div style="color: #7f8c8d;">Calificación: ${edu.grade}</div>` : ''}
@@ -526,7 +526,7 @@ class TemplateController {
             ${certifications.map(cert => `
             <div class="entry">
                 <h3 class="entry-title">${cert.name}</h3>
-                <div class="entry-subtitle">${cert.issuing_organization}${cert.issue_date ? ` - ${this.formatDate(cert.issue_date)}` : ''}</div>
+                <div class="entry-subtitle">${cert.issuing_organization}${cert.issue_date ? ` - ${TemplateController.formatDate(cert.issue_date)}` : ''}</div>
                 ${cert.credential_id ? `<div style="color: #7f8c8d;">ID: ${cert.credential_id}</div>` : ''}
             </div>
             `).join('')}
@@ -553,7 +553,7 @@ class TemplateController {
    * Formatear fecha para mostrar
    * @private
    */
-  formatDate(date) {
+  static formatDate(date) {
     if (!date) return '';
     const d = new Date(date);
     const months = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];

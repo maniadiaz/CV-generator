@@ -122,8 +122,14 @@ async function runTests() {
     console.log(`Contiene "Harvard Classic": ${htmlClassic.includes('Harvard') ? 'Sí' : 'No'}`);
     console.log(`Contiene estilos CSS: ${htmlClassic.includes('<style>') ? 'Sí' : 'No'}`);
 
+    // Crear carpeta previews si no existe
+    const previewsDir = path.join(__dirname, 'previews');
+    if (!fs.existsSync(previewsDir)) {
+      fs.mkdirSync(previewsDir, { recursive: true });
+    }
+
     // Guardar HTML para inspección manual (opcional)
-    const classicPath = path.join(__dirname, 'preview-harvard-classic.html');
+    const classicPath = path.join(previewsDir, 'preview-harvard-classic.html');
     fs.writeFileSync(classicPath, htmlClassic);
     console.log(`✅ HTML guardado en: ${classicPath}`);
     console.log();
@@ -141,7 +147,7 @@ async function runTests() {
     console.log(`Diferente de Classic: ${htmlModern !== htmlClassic ? 'Sí' : 'No'}`);
 
     // Guardar HTML para inspección manual
-    const modernPath = path.join(__dirname, 'preview-harvard-modern.html');
+    const modernPath = path.join(previewsDir, 'preview-harvard-modern.html');
     fs.writeFileSync(modernPath, htmlModern);
     console.log(`✅ HTML guardado en: ${modernPath}`);
     console.log();
