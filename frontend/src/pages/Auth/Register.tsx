@@ -100,8 +100,12 @@ const Register = () => {
       // Exclude confirmPassword from the data sent to the backend
       const { confirmPassword, ...registerData } = data;
       await dispatch(registerAction(registerData)).unwrap();
-      // Show success message instead of redirecting
+      // Show success message
       setRegistrationSuccess(true);
+      // Redirect to login after 3 seconds
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
     } catch (err: any) {
       setError(err || t('auth.registerError'));
     }

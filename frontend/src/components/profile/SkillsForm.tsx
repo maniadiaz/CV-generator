@@ -295,7 +295,7 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
     <Box sx={{
       width: '100%',
       overflow: 'hidden',
-      maxWidth: { xs: 350, sm: '100%' },
+      maxWidth: { xs: 330, sm: '100%' },
       mx: 'auto'
     }}>
       {error && (

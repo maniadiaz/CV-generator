@@ -7,6 +7,10 @@ interface AuthResponse {
   user: User;
 }
 
+interface RegisterResponse {
+  message: string;
+}
+
 export const authService = {
   // Login
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
@@ -15,8 +19,8 @@ export const authService = {
   },
 
   // Register
-  register: async (data: RegisterData): Promise<AuthResponse> => {
-    const response = await api.post<ApiResponse<AuthResponse>>('/api/auth/register', data);
+  register: async (data: RegisterData): Promise<RegisterResponse> => {
+    const response = await api.post<ApiResponse<RegisterResponse>>('/api/auth/register', data);
     return response.data.data;
   },
 

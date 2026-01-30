@@ -43,11 +43,10 @@ export const register = createAsyncThunk(
   'auth/register',
   async (data: RegisterData, { rejectWithValue }) => {
     try {
-      const { accessToken, refreshToken, user } = await authService.register(data);
-      localStorage.setItem('token', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('user', JSON.stringify(user));
-      return { token: accessToken, user };
+      const response = await authService.register(data);
+      // NO guardar tokens ni usuario en localStorage
+      // El usuario debe verificar su correo antes de iniciar sesión
+      return response;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Error al registrarse');
     }
@@ -114,11 +113,13 @@ const authSlice = createSlice({
         state.loading = true;
         state.error = null;
       })
-      .addCase(register.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
+      .addCase(register.fulfilled, (state) => {
+        // No autenticar al usuario después del registro
+        // El usuario debe verificar su correo primero
         state.loading = false;
-        state.isAuthenticated = true;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.isAuthenticated = false;
+        state.token = null;
+        state.user = null;
         state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
