@@ -108,17 +108,17 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    // Register
+    // Register - DO NOT authenticate, user needs to verify email
     builder
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(register.fulfilled, (state, action: PayloadAction<{ token: string; user: User }>) => {
+      .addCase(register.fulfilled, (state) => {
         state.loading = false;
-        state.isAuthenticated = true;
-        state.token = action.payload.token;
-        state.user = action.payload.user;
+        state.isAuthenticated = false;
+        state.token = null;
+        state.user = null;
         state.error = null;
       })
       .addCase(register.rejected, (state, action) => {

@@ -40,3 +40,5 @@ backend/coverage/
 backend/uploads/
 
 *.claude
+
+*.env
