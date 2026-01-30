@@ -47,6 +47,9 @@ const MainLayout = ({ children }: MainLayoutProps) => {
   const { user } = useAppSelector((state) => state.auth);
   const { mode } = useAppSelector((state) => state.theme);
 
+  // Construir nombre completo del usuario
+  const userDisplayName = user?.name || `${user?.first_name || ''} ${user?.last_name || ''}`.trim() || user?.email || 'Usuario';
+
   const [mobileOpen, setMobileOpen] = useState(false);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
   const [anchorElLang, setAnchorElLang] = useState<null | HTMLElement>(null);
@@ -186,10 +189,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
               <MenuItem onClick={() => handleChangeLanguage('en')}>English</MenuItem>
             </Menu>
 
-            <Tooltip title={user?.name || user?.email || ''}>
+            <Tooltip title={userDisplayName}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt={user?.name} sx={{ bgcolor: 'secondary.main' }}>
-                  {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
+                <Avatar alt={userDisplayName} sx={{ bgcolor: 'secondary.main' }}>
+                  {userDisplayName.charAt(0).toUpperCase()}
                 </Avatar>
               </IconButton>
             </Tooltip>
@@ -209,7 +212,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
               <MenuItem disabled>
                 <Box sx={{ minWidth: 200 }}>
                   <Typography variant="body1" fontWeight="bold" noWrap>
-                    {user?.name || `${user?.first_name} ${user?.last_name}`.trim()}
+                    {userDisplayName}
                   </Typography>
                   <Typography variant="body2" color="text.secondary" noWrap>
                     {user?.email}
