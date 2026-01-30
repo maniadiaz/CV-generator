@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true }); // mergeParams para acceder a :profileId
 const skillController = require('../controllers/skillController');
+const skillCategoryController = require('../controllers/skillCategoryController');
 const { authenticate } = require('../middlewares/auth');
 const { validate, validateParams } = require('../middlewares/validation');
 const {
@@ -15,6 +16,20 @@ const {
  * Todas las rutas requieren autenticación
  * Rutas base: /api/profiles/:profileId/skills
  */
+
+/**
+ * @route   GET /api/profiles/:profileId/skills/categories
+ * @desc    Obtener todas las categorías de skills disponibles
+ * @access  Private
+ */
+router.get('/categories', authenticate, skillCategoryController.getAllCategories);
+
+/**
+ * @route   GET /api/profiles/:profileId/skills/categories/grouped
+ * @desc    Obtener categorías agrupadas por tema
+ * @access  Private
+ */
+router.get('/categories/grouped', authenticate, skillCategoryController.getCategoriesGroupedByTheme);
 
 /**
  * @route   GET /api/profiles/:profileId/skills/stats

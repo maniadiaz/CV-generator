@@ -20,19 +20,195 @@ Esta guía está diseñada específicamente para ayudar al equipo de frontend a 
 
 ## Skills (Habilidades)
 
-### Categorías Válidas
+### Obtener Categorías Disponibles
 
-⚠️ **IMPORTANTE:** El campo `category` solo acepta estos valores exactos:
+**🆕 NUEVO:** En lugar de tener categorías hardcodeadas en el frontend, ahora puedes obtenerlas dinámicamente del backend.
 
-| Valor API | Descripción | Sugerencia para UI |
-|-----------|-------------|-------------------|
-| `programming_languages` | Lenguajes de programación | "Lenguajes de Programación" |
-| `frameworks_libraries` | Frameworks y librerías | "Frameworks & Librerías" |
-| `databases` | Bases de datos | "Bases de Datos" |
-| `cloud_devops` | Cloud y DevOps | "Cloud & DevOps" |
-| `tools` | Herramientas | "Herramientas" |
-| `soft_skills` | Habilidades blandas | "Habilidades Blandas" |
-| `other` | Otros | "Otros" |
+**Endpoint:** `GET /api/profiles/:profileId/skills/categories`
+
+**Headers:**
+```javascript
+{
+  "Authorization": "Bearer {accessToken}"
+}
+```
+
+**Respuesta exitosa (200):**
+```json
+{
+  "success": true,
+  "message": "Skill categories retrieved successfully",
+  "data": {
+    "categories": [
+      {
+        "value": "programming_languages",
+        "label": "Lenguajes de Programación",
+        "description": "Lenguajes como JavaScript, Python, Java, etc.",
+        "icon": "code",
+        "examples": ["JavaScript", "Python", "Java", "C++", "Ruby", "Go"]
+      },
+      {
+        "value": "design_tools",
+        "label": "Herramientas de Diseño",
+        "description": "Software de diseño gráfico y UX/UI",
+        "icon": "palette",
+        "examples": ["Figma", "Adobe Photoshop", "Illustrator", "Sketch"]
+      },
+      // ... más de 30 categorías
+    ],
+    "total": 33
+  }
+}
+```
+
+**Endpoint Alternativo (Categorías Agrupadas):** `GET /api/profiles/:profileId/skills/categories/grouped`
+
+**Respuesta exitosa (200):**
+```json
+{
+  "success": true,
+  "message": "Grouped skill categories retrieved successfully",
+  "data": {
+    "categoriesGrouped": {
+      "Tecnología": [
+        { "value": "programming_languages", "label": "Lenguajes de Programación", ... },
+        { "value": "frameworks_libraries", "label": "Frameworks y Librerías", ... }
+      ],
+      "Diseño y Creatividad": [
+        { "value": "design_tools", "label": "Herramientas de Diseño", ... },
+        { "value": "multimedia", "label": "Multimedia y Video", ... }
+      ],
+      "Negocios": [...],
+      "Finanzas": [...],
+      // ... más grupos
+    },
+    "totalGroups": 13
+  }
+}
+```
+
+### Categorías Disponibles (33 Total)
+
+El backend ahora soporta **33 categorías diferentes** para cubrir todos los tipos de profesiones:
+
+#### **Tecnología** (5 categorías)
+- `programming_languages` - Lenguajes de Programación
+- `frameworks_libraries` - Frameworks y Librerías
+- `databases` - Bases de Datos
+- `cloud_devops` - Cloud y DevOps
+- `mobile_development` - Desarrollo Móvil
+
+#### **Diseño y Creatividad** (3 categorías)
+- `design_tools` - Herramientas de Diseño
+- `multimedia` - Multimedia y Video
+- `graphic_design` - Diseño Gráfico
+
+#### **Negocios** (4 categorías)
+- `project_management` - Gestión de Proyectos
+- `business_analysis` - Análisis de Negocios
+- `marketing_digital` - Marketing Digital
+- `sales` - Ventas
+
+#### **Finanzas** (2 categorías)
+- `accounting` - Contabilidad
+- `finance` - Finanzas
+
+#### **Otros Sectores**
+- `human_resources` - Recursos Humanos
+- `healthcare` - Salud
+- `laboratory` - Laboratorio
+- `teaching` - Enseñanza
+- `legal` - Legal
+- `operations` - Operaciones
+- `logistics` - Logística
+- `architecture` - Arquitectura
+- `engineering` - Ingeniería
+- `communication` - Comunicación
+- `social_media` - Redes Sociales
+- `customer_service` - Atención al Cliente
+- `office_tools` - Herramientas de Oficina
+- `soft_skills` - Habilidades Blandas
+- `languages` - Idiomas
+- `other` - Otros
+
+### Implementación Recomendada en Frontend
+
+**1. Cargar categorías al inicio:**
+
+```typescript
+// types/skill.types.ts
+export interface SkillCategory {
+  value: string;
+  label: string;
+  description: string;
+  icon: string;
+  examples: string[];
+}
+
+// api/skillCategories.api.ts
+export async function getSkillCategories(profileId: number): Promise<SkillCategory[]> {
+  const response = await axios.get(
+    `${API_URL}/api/profiles/${profileId}/skills/categories`,
+    {
+      headers: { Authorization: `Bearer ${getAccessToken()}` }
+    }
+  );
+  return response.data.data.categories;
+}
+
+// Uso en componente:
+const [categories, setCategories] = useState<SkillCategory[]>([]);
+
+useEffect(() => {
+  async function loadCategories() {
+    const cats = await getSkillCategories(profileId);
+    setCategories(cats);
+  }
+  loadCategories();
+}, [profileId]);
+```
+
+**2. Renderizar en combobox/select:**
+
+```tsx
+// Material UI Select
+<FormControl fullWidth>
+  <InputLabel>Categoría</InputLabel>
+  <Select
+    value={selectedCategory}
+    onChange={(e) => setSelectedCategory(e.target.value)}
+  >
+    {categories.map(cat => (
+      <MenuItem key={cat.value} value={cat.value}>
+        <Box display="flex" alignItems="center" gap={1}>
+          <Icon>{cat.icon}</Icon>
+          <Typography>{cat.label}</Typography>
+        </Box>
+      </MenuItem>
+    ))}
+  </Select>
+  <FormHelperText>{selectedCategoryDescription}</FormHelperText>
+</FormControl>
+```
+
+**3. Para versión agrupada (mejor UX):**
+
+```tsx
+// Usando categorías agrupadas
+const [groupedCategories, setGroupedCategories] = useState({});
+
+// Renderizar con optgroups
+<Select value={selectedCategory}>
+  {Object.entries(groupedCategories).map(([groupName, cats]) => (
+    <ListSubheader key={groupName}>{groupName}</ListSubheader>
+    {cats.map(cat => (
+      <MenuItem key={cat.value} value={cat.value}>
+        {cat.label}
+      </MenuItem>
+    ))}
+  ))}
+</Select>
+```
 
 ### Niveles de Proficiencia Válidos
 
