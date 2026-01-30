@@ -107,7 +107,7 @@ const authSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    // Register
+    // Register - DO NOT authenticate, user needs to verify email
     builder
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -117,6 +117,9 @@ const authSlice = createSlice({
         // No autenticar al usuario después del registro
         // El usuario debe verificar su correo primero
         state.loading = false;
+        state.isAuthenticated = false;
+        state.token = null;
+        state.user = null;
         state.isAuthenticated = false;
         state.token = null;
         state.user = null;

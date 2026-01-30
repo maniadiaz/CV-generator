@@ -51,6 +51,7 @@ const Register = () => {
   const dispatch = useAppDispatch();
   const [error, setError] = useState<string | null>(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [countdown, setCountdown] = useState(5);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   // Check if user is already authenticated
@@ -78,6 +79,18 @@ const Register = () => {
       navigate('/dashboard');
     }
   }, [isAuthenticated, navigate]);
+
+  // Countdown and redirect after successful registration
+  useEffect(() => {
+    if (registrationSuccess && countdown > 0) {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    } else if (registrationSuccess && countdown === 0) {
+      navigate('/login');
+    }
+  }, [registrationSuccess, countdown, navigate]);
 
   const {
     control,
@@ -143,9 +156,14 @@ const Register = () => {
           )}
 
           {registrationSuccess && (
-            <Alert severity="success" sx={{ width: '100%', mb: 2 }}>
-              {t('auth.registerSuccess')}. {t('auth.checkEmailToVerify')}
-            </Alert>
+            <>
+              <Alert severity="success" sx={{ width: '100%', mb: 2 }}>
+                {t('auth.registerSuccess')}. {t('auth.checkEmailToVerify')}
+              </Alert>
+              <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center', mb: 2 }}>
+                {t('auth.redirectingToLogin', { seconds: countdown })}
+              </Typography>
+            </>
           )}
 
           {!registrationSuccess && (
