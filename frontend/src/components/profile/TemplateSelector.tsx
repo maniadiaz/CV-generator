@@ -54,7 +54,6 @@ export default function TemplateSelector({
       setLoading(true);
       setError(null);
       const data = await templatesService.getTemplates();
-      console.log('Templates loaded:', data);
       setTemplates(data);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : t('templates.errors.loadFailed');

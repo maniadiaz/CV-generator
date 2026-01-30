@@ -197,13 +197,21 @@ const MainLayout = ({ children }: MainLayoutProps) => {
               anchorEl={anchorElUser}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
             >
               <MenuItem disabled>
-                <Box>
-                  <Typography variant="body1" fontWeight="bold">
-                    {user?.name}
+                <Box sx={{ minWidth: 200 }}>
+                  <Typography variant="body1" fontWeight="bold" noWrap>
+                    {user?.name || `${user?.first_name} ${user?.last_name}`.trim()}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" noWrap>
                     {user?.email}
                   </Typography>
                 </Box>

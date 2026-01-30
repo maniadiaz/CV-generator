@@ -143,7 +143,6 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
       setCategories(data && data.length > 0 ? data : predefinedCategories);
     } catch (err) {
       // Si el endpoint no existe, usar categorías predefinidas
-      console.log('Categories endpoint not available, using predefined categories');
       setCategories(predefinedCategories);
     }
   };
@@ -191,18 +190,12 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
   };
 
   const onSubmit = async (data: CreateSkillData) => {
-    console.log('=== SKILLS FORM SUBMIT ===');
-    console.log('Profile ID:', profileId);
-    console.log('Editing ID:', editingId);
-    console.log('Form Data:', data);
 
     try {
       setError(null);
       if (editingId) {
-        console.log('Updating skill...');
         await skillsService.updateSkill(profileId, editingId, data);
       } else {
-        console.log('Creating skill...');
         await skillsService.createSkill(profileId, data);
       }
       await loadSkills();

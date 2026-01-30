@@ -42,7 +42,6 @@ export const skillsService = {
       delete cleanData.years_of_experience;
     }
 
-    console.log('Sending to API:', cleanData);
     const response = await api.post<ApiResponse<SkillResponse>>(`/api/profiles/${profileId}/skills`, cleanData);
     return response.data.data.skill;
   },
@@ -55,7 +54,6 @@ export const skillsService = {
       delete cleanData.years_of_experience;
     }
 
-    console.log('Sending to API (update):', cleanData);
     const response = await api.put<ApiResponse<SkillResponse>>(`/api/profiles/${profileId}/skills/${id}`, cleanData);
     return response.data.data.skill;
   },

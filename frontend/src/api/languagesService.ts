@@ -30,7 +30,6 @@ export const languagesService = {
     if (!cleanData.certification_name) delete cleanData.certification_name;
     if (!cleanData.certification_score) delete cleanData.certification_score;
 
-    console.log('Sending language to API:', cleanData);
     const response = await api.post<ApiResponse<LanguageResponse>>(`/api/profiles/${profileId}/languages`, cleanData);
     return response.data.data.language;
   },
@@ -42,7 +41,6 @@ export const languagesService = {
     if (!cleanData.certification_name) delete cleanData.certification_name;
     if (!cleanData.certification_score) delete cleanData.certification_score;
 
-    console.log('Sending language update to API:', cleanData);
     const response = await api.put<ApiResponse<LanguageResponse>>(`/api/profiles/${profileId}/languages/${id}`, cleanData);
     return response.data.data.language;
   },

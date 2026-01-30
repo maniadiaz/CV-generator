@@ -11,7 +11,6 @@ if (userStr) {
   try {
     userData = JSON.parse(userStr);
   } catch (e) {
-    console.error('Error parsing user data from localStorage', e);
     localStorage.removeItem('user');
   }
 }
@@ -44,14 +43,12 @@ export const register = createAsyncThunk(
   'auth/register',
   async (data: RegisterData, { rejectWithValue }) => {
     try {
-      console.log('📤 Sending registration data:', data);
       const { accessToken, refreshToken, user } = await authService.register(data);
-      console.log('✅ Registration response:', { accessToken, user });
       localStorage.setItem('token', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
+      localStorage.setItem('user', JSON.stringify(user));
       return { token: accessToken, user };
     } catch (error: any) {
-      console.error('❌ Registration error:', error.response?.data);
       return rejectWithValue(error.response?.data?.message || 'Error al registrarse');
     }
   }

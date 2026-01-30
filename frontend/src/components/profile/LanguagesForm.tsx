@@ -131,18 +131,12 @@ const LanguagesForm = ({ profileId, onSaveSuccess }: LanguagesFormProps) => {
   };
 
   const onSubmit = async (data: CreateLanguageData) => {
-    console.log('=== LANGUAGES FORM SUBMIT ===');
-    console.log('Profile ID:', profileId);
-    console.log('Editing ID:', editingId);
-    console.log('Form Data:', data);
 
     try {
       setError(null);
       if (editingId) {
-        console.log('Updating language...');
         await languagesService.updateLanguage(profileId, editingId, data);
       } else {
-        console.log('Creating language...');
         await languagesService.createLanguage(profileId, data);
       }
       await loadLanguages();

@@ -137,18 +137,12 @@ const CertificationsForm = ({ profileId, onSaveSuccess }: CertificationsFormProp
   };
 
   const onSubmit = async (data: CreateCertificationData) => {
-    console.log('=== CERTIFICATIONS FORM SUBMIT ===');
-    console.log('Profile ID:', profileId);
-    console.log('Editing ID:', editingId);
-    console.log('Form Data:', data);
 
     try {
       setError(null);
       if (editingId) {
-        console.log('Updating certification...');
         await certificationsService.updateCertification(profileId, editingId, data);
       } else {
-        console.log('Creating certification...');
         await certificationsService.createCertification(profileId, data);
       }
       await loadCertifications();

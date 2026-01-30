@@ -53,73 +53,26 @@ export default function PDFPreview({ profileId }: PDFPreviewProps) {
       setValidating(true);
       const result = await templatesService.validateProfile(profileId);
       setValidation(result);
-    } catch (err) {
-      console.error('Validation error:', err);
     } finally {
       setValidating(false);
     }
   };
 
   const handlePreview = async () => {
-    console.log('=== PREVIEW PDF CLICKED ===');
-    console.log('ProfileId:', profileId);
-    console.log('Validation state:', validation);
-
     if (!validation?.isValid) {
-      console.log('Preview cancelled: Profile is not valid');
       setError(t('pdf.errors.incompleteProfile'));
       return;
     }
-
-    console.log('Starting PDF preview request...');
-    console.log('Request details:', {
-      endpoint: `/api/profiles/${profileId}/pdf/preview-pdf`,
-      method: 'GET',
-      profileId: profileId,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
 
     try {
       setLoading(true);
       setError(null);
 
       const blob = await templatesService.previewPDF(profileId);
-      console.log('PDF blob received:', {
-        size: blob.size,
-        type: blob.type,
-      });
-
-      // Verificar si el blob es realmente un PDF
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const arrayBuffer = e.target?.result as ArrayBuffer;
-        const bytes = new Uint8Array(arrayBuffer);
-        // Los PDFs comienzan con %PDF
-        const header = String.fromCharCode(...bytes.slice(0, 4));
-        console.log('PDF header:', header);
-        console.log('First 100 bytes:', String.fromCharCode(...bytes.slice(0, 100)));
-
-        if (header !== '%PDF') {
-          console.error('El blob no es un PDF válido. Header:', header);
-          // Intentar leer como texto para ver el contenido
-          const textReader = new FileReader();
-          textReader.onload = (textE) => {
-            console.log('Blob content as text:', textE.target?.result);
-          };
-          textReader.readAsText(blob);
-          setError('El archivo recibido no es un PDF válido');
-        }
-      };
-      reader.readAsArrayBuffer(blob.slice(0, 1000)); // Leer los primeros 1000 bytes
-
       const url = window.URL.createObjectURL(blob);
-      console.log('PDF URL created:', url);
       setPdfUrl(url);
       setPreviewOpen(true);
     } catch (err) {
-      console.error('=== PREVIEW PDF ERROR ===', err);
       const errorMessage = err instanceof Error ? err.message : t('pdf.errors.previewFailed');
       setError(errorMessage);
     } finally {
@@ -128,73 +81,27 @@ export default function PDFPreview({ profileId }: PDFPreviewProps) {
   };
 
   const handleExport = async () => {
-    console.log('=== EXPORT PDF CLICKED ===');
-    console.log('ProfileId:', profileId);
-    console.log('Validation state:', validation);
-
     if (!validation?.isValid) {
-      console.log('Export cancelled: Profile is not valid');
       setError(t('pdf.errors.incompleteProfile'));
       return;
     }
 
     if (validation.warnings.length > 0) {
-      console.log('Profile has warnings:', validation.warnings);
       const proceed = window.confirm(
         t('pdf.confirmExport', { completeness: validation.completeness })
       );
       if (!proceed) {
-        console.log('Export cancelled by user');
         return;
       }
     }
-
-    console.log('Starting PDF export request...');
-    console.log('Request details:', {
-      endpoint: `/api/profiles/${profileId}/pdf/export-pdf`,
-      method: 'GET',
-      profileId: profileId,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
 
     try {
       setExporting(true);
       setError(null);
 
       const blob = await templatesService.exportPDF(profileId);
-      console.log('PDF blob received:', {
-        size: blob.size,
-        type: blob.type,
-      });
-
-      // Verificar si el blob es realmente un PDF
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const arrayBuffer = e.target?.result as ArrayBuffer;
-        const bytes = new Uint8Array(arrayBuffer);
-        // Los PDFs comienzan con %PDF
-        const header = String.fromCharCode(...bytes.slice(0, 4));
-        console.log('PDF header (export):', header);
-
-        if (header !== '%PDF') {
-          console.error('El blob de export no es un PDF válido. Header:', header);
-          // Intentar leer como texto
-          const textReader = new FileReader();
-          textReader.onload = (textE) => {
-            console.log('Export blob content as text:', textE.target?.result);
-          };
-          textReader.readAsText(blob);
-        }
-      };
-      reader.readAsArrayBuffer(blob.slice(0, 1000));
-
       const url = window.URL.createObjectURL(blob);
-      console.log('PDF URL created:', url);
-
       const filename = `CV-${Date.now()}.pdf`;
-      console.log('Downloading file as:', filename);
 
       const link = document.createElement('a');
       link.href = url;
@@ -203,10 +110,7 @@ export default function PDFPreview({ profileId }: PDFPreviewProps) {
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-
-      console.log('PDF export completed successfully');
     } catch (err) {
-      console.error('=== EXPORT PDF ERROR ===', err);
       const errorMessage = err instanceof Error ? err.message : t('pdf.errors.exportFailed');
       setError(errorMessage);
     } finally {
