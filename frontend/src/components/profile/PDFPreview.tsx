@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -9,7 +9,6 @@ import {
   IconButton,
   Alert,
   CircularProgress,
-  Tooltip,
   Typography,
 } from '@mui/material';
 import {
@@ -17,7 +16,6 @@ import {
   Download as DownloadIcon,
   Visibility as PreviewIcon,
   CheckCircle as ValidIcon,
-  Warning as WarningIcon,
   Error as ErrorIcon,
 } from '@mui/icons-material';
 import { templatesService } from '@api/templatesService';
