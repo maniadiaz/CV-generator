@@ -1,4 +1,8 @@
 const Joi = require('joi');
+const { getCategoryValues } = require('../config/skillCategories');
+
+// Obtener categorías válidas dinámicamente
+const validCategories = getCategoryValues();
 
 /**
  * Validador para crear skill
@@ -15,18 +19,10 @@ const createSkillSchema = Joi.object({
     }),
 
   category: Joi.string()
-    .valid(
-      'programming_languages',
-      'frameworks_libraries',
-      'databases',
-      'cloud_devops',
-      'tools',
-      'soft_skills',
-      'other'
-    )
+    .valid(...validCategories)
     .required()
     .messages({
-      'any.only': 'Category must be one of: programming_languages, frameworks_libraries, databases, cloud_devops, tools, soft_skills, other',
+      'any.only': `Category must be one of: ${validCategories.join(', ')}`,
       'any.required': 'Category is required'
     }),
 
@@ -69,18 +65,10 @@ const updateSkillSchema = Joi.object({
     }),
 
   category: Joi.string()
-    .valid(
-      'programming_languages',
-      'frameworks_libraries',
-      'databases',
-      'cloud_devops',
-      'tools',
-      'soft_skills',
-      'other'
-    )
+    .valid(...validCategories)
     .optional()
     .messages({
-      'any.only': 'Category must be one of: programming_languages, frameworks_libraries, databases, cloud_devops, tools, soft_skills, other'
+      'any.only': `Category must be one of: ${validCategories.join(', ')}`
     }),
 
   proficiency_level: Joi.string()

@@ -20,8 +20,9 @@ class PdfController {
       res.setHeader('Content-Disposition', `attachment; filename="${result.fileName}"`);
       res.setHeader('Content-Length', result.pdfBuffer.length);
 
-      // Enviar el PDF como buffer
-      return res.send(result.pdfBuffer);
+      // IMPORTANTE: Usar res.end() en lugar de res.send() para enviar datos binarios
+      // res.send() puede convertir el Buffer a JSON
+      return res.end(result.pdfBuffer, 'binary');
 
     } catch (error) {
       logger.error('Export PDF error:', error);
@@ -55,8 +56,9 @@ class PdfController {
       res.setHeader('Content-Disposition', `inline; filename="${result.fileName}"`);
       res.setHeader('Content-Length', result.pdfBuffer.length);
 
-      // Enviar el PDF como buffer
-      return res.send(result.pdfBuffer);
+      // IMPORTANTE: Usar res.end() en lugar de res.send() para enviar datos binarios
+      // res.send() puede convertir el Buffer a JSON
+      return res.end(result.pdfBuffer, 'binary');
 
     } catch (error) {
       logger.error('Preview PDF error:', error);

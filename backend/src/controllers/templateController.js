@@ -244,14 +244,15 @@ class TemplateController {
         <div class="entry">
             <div class="entry-header">
                 <div>
-                    <h3 class="entry-title">${exp.job_title}</h3>
-                    <div class="entry-subtitle">${exp.company}${exp.location ? `, ${exp.location}` : ''}</div>
+                    <h3 class="entry-title">${exp.position || exp.project_title || 'Sin título'}</h3>
+                    <div class="entry-subtitle">${exp.company || ''}${exp.location ? `, ${exp.location}` : ''}</div>
                 </div>
                 <div class="entry-date">
                     ${TemplateController.formatDate(exp.start_date)} - ${exp.is_current ? 'Presente' : TemplateController.formatDate(exp.end_date)}
                 </div>
             </div>
-            ${exp.description ? `<p class="description">${exp.description}</p>` : ''}
+            ${exp.achievements ? `<p class="description">${exp.achievements}</p>` : ''}
+            ${exp.technologies ? `<div style="margin-top: 5px;"><strong>Tecnologías:</strong> ${exp.technologies}</div>` : ''}
         </div>
         `).join('')}
     </div>
@@ -298,8 +299,9 @@ class TemplateController {
         ${certifications.map(cert => `
         <div class="entry">
             <h3 class="entry-title">${cert.name}</h3>
-            <div class="entry-subtitle">${cert.issuing_organization}${cert.issue_date ? ` - ${TemplateController.formatDate(cert.issue_date)}` : ''}</div>
+            <div class="entry-subtitle">${cert.issuer}${cert.issue_date ? ` - ${TemplateController.formatDate(cert.issue_date)}` : ''}</div>
             ${cert.credential_id ? `<div>ID: ${cert.credential_id}</div>` : ''}
+            ${cert.credential_url ? `<div><a href="${cert.credential_url}">Verificar credencial</a></div>` : ''}
         </div>
         `).join('')}
     </div>
@@ -310,7 +312,7 @@ class TemplateController {
         <h2>Idiomas</h2>
         <ul>
             ${languages.map(lang => `
-            <li><strong>${lang.language}</strong> - ${lang.proficiency_level || 'No especificado'}</li>
+            <li><strong>${lang.name}</strong> - ${lang.level || 'No especificado'}${lang.certification_name ? ` (${lang.certification_name}${lang.certification_score ? `: ${lang.certification_score}` : ''})` : ''}</li>
             `).join('')}
         </ul>
     </div>
@@ -472,14 +474,15 @@ class TemplateController {
             <div class="entry">
                 <div class="entry-header">
                     <div>
-                        <h3 class="entry-title">${exp.job_title}</h3>
-                        <div class="entry-subtitle">${exp.company}${exp.location ? `, ${exp.location}` : ''}</div>
+                        <h3 class="entry-title">${exp.position || exp.project_title || 'Sin título'}</h3>
+                        <div class="entry-subtitle">${exp.company || ''}${exp.location ? `, ${exp.location}` : ''}</div>
                     </div>
                     <div class="entry-date">
                         ${TemplateController.formatDate(exp.start_date)} - ${exp.is_current ? 'Presente' : TemplateController.formatDate(exp.end_date)}
                     </div>
                 </div>
-                ${exp.description ? `<p class="description">${exp.description}</p>` : ''}
+                ${exp.achievements ? `<p class="description">${exp.achievements}</p>` : ''}
+                ${exp.technologies ? `<div style="margin-top: 8px; color: #7f8c8d;"><strong>Tecnologías:</strong> ${exp.technologies}</div>` : ''}
             </div>
             `).join('')}
         </div>
@@ -526,8 +529,9 @@ class TemplateController {
             ${certifications.map(cert => `
             <div class="entry">
                 <h3 class="entry-title">${cert.name}</h3>
-                <div class="entry-subtitle">${cert.issuing_organization}${cert.issue_date ? ` - ${TemplateController.formatDate(cert.issue_date)}` : ''}</div>
+                <div class="entry-subtitle">${cert.issuer}${cert.issue_date ? ` - ${TemplateController.formatDate(cert.issue_date)}` : ''}</div>
                 ${cert.credential_id ? `<div style="color: #7f8c8d;">ID: ${cert.credential_id}</div>` : ''}
+                ${cert.credential_url ? `<div style="color: #7f8c8d;"><a href="${cert.credential_url}" style="color: ${colors.primary};">Verificar credencial</a></div>` : ''}
             </div>
             `).join('')}
         </div>
@@ -538,7 +542,7 @@ class TemplateController {
             <h2>Idiomas</h2>
             <ul>
                 ${languages.map(lang => `
-                <li><strong>${lang.language}</strong> - ${lang.proficiency_level || 'No especificado'}</li>
+                <li><strong>${lang.name}</strong> - ${lang.level || 'No especificado'}${lang.certification_name ? ` (${lang.certification_name}${lang.certification_score ? `: ${lang.certification_score}` : ''})` : ''}</li>
                 `).join('')}
             </ul>
         </div>
