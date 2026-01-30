@@ -763,7 +763,7 @@ interface Template {
     accent: string;
   };
   features: string[];
-  previewImage: string;
+  previewImage: string; // URL relativa: /templates/previews/template_name.png
 }
 
 async function getTemplates(): Promise<Template[]> {
@@ -771,6 +771,10 @@ async function getTemplates(): Promise<Template[]> {
   const data = await response.json();
   return data.data.templates;
 }
+
+// Las imágenes de preview están disponibles en:
+const previewImageUrl = `${API_URL}${template.previewImage}`;
+// Ejemplo: https://api-cv.servercontrol-mzt.com/templates/previews/harvard_classic.png
 
 // Componente React de ejemplo
 function TemplateSelector() {
@@ -1075,7 +1079,9 @@ async function downloadPDF(profileId: number) {
       throw new Error('Error al exportar PDF');
     }
 
-    // Obtener el blob del PDF
+    // IMPORTANTE: El backend ahora envía el PDF como binario correctamente
+    // No necesitas hacer conversión manual de JSON a Blob
+    // Obtener el blob del PDF directamente
     const blob = await response.blob();
 
     // Crear URL temporal

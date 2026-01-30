@@ -25,7 +25,10 @@
     "saving": "Guardando...",
     "saved": "Guardado",
     "errorSaving": "Error al guardar",
-    "none": "Ninguno"
+    "none": "Ninguno",
+    "close": "Cerrar",
+    "show": "Mostrar",
+    "hide": "Ocultar"
   },
   "auth": {
     "login": "Iniciar sesión",
@@ -350,9 +353,53 @@
     "url": "URL (opcional)",
     "github": "GitHub (opcional)"
   },
+  "templates": {
+    "title": "Plantillas",
+    "selectTemplate": "Seleccionar Plantilla",
+    "currentTemplate": "Plantilla Actual",
+    "applyTemplate": "Aplicar Plantilla",
+    "changeSuccess": "Plantilla cambiada correctamente",
+    "features": "Características",
+    "previewNotAvailable": "Vista previa no disponible",
+    "errors": {
+      "loadFailed": "Error al cargar las plantillas",
+      "changeFailed": "Error al cambiar la plantilla"
+    }
+  },
+  "templatesAndExport": {
+    "title": "Plantillas y Exportación",
+    "description": "Selecciona una plantilla para tu CV y expórtalo a PDF"
+  },
+  "pdf": {
+    "title": "Exportar PDF",
+    "description": "Previsualiza y descarga tu CV en formato PDF",
+    "preview": "Vista Previa",
+    "export": "Exportar PDF",
+    "download": "Descargar",
+    "previewTitle": "Vista Previa del CV",
+    "previewNote": "Si no se muestra el PDF, usa el botón de Descargar",
+    "loading": "Cargando...",
+    "exporting": "Exportando...",
+    "validProfile": "Tu perfil está completo y listo para exportar",
+    "invalidProfile": "Tu perfil está incompleto. Completa la información antes de exportar.",
+    "completeness": "Completitud",
+    "warnings": "Advertencias",
+    "confirmExport": "Tu CV está {{completeness}}% completo. ¿Deseas continuar con la exportación?",
+    "severity": {
+      "low": "Baja",
+      "medium": "Media",
+      "high": "Alta"
+    },
+    "errors": {
+      "previewFailed": "Error al cargar la vista previa",
+      "exportFailed": "Error al exportar el PDF",
+      "incompleteProfile": "Completa la información personal antes de exportar"
+    }
+  },
   "nav": {
     "dashboard": "Panel de Control",
     "myProfiles": "Mis Perfiles",
-    "editProfile": "Editar Perfil"
+    "editProfile": "Editar Perfil",
+    "templatesAndExport": "Plantillas y Exportar"
   }
 }

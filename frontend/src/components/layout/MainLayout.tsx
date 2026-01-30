@@ -26,7 +26,7 @@ import {
   Logout as LogoutIcon,
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
-  Description as ProfileIcon,
+  Style as TemplateIcon,
 } from '@mui/icons-material';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
@@ -90,9 +90,21 @@ const MainLayout = ({ children }: MainLayoutProps) => {
     setMobileOpen(false);
   };
 
+  // Extract profile ID from current path if present
+  const profileIdMatch = location.pathname.match(/\/profiles\/(\d+)/);
+  const currentProfileId = profileIdMatch ? profileIdMatch[1] : null;
+
   const menuItems = [
     { text: t('nav.dashboard'), icon: <DashboardIcon />, path: '/dashboard' },
-    { text: t('nav.myProfiles'), icon: <ProfileIcon />, path: '/dashboard' },
+    ...(currentProfileId
+      ? [
+          {
+            text: t('nav.templatesAndExport'),
+            icon: <TemplateIcon />,
+            path: `/profiles/${currentProfileId}/templates-export`,
+          },
+        ]
+      : []),
   ];
 
   const drawer = (

@@ -26,6 +26,7 @@ export interface CreateSocialNetworkData {
   platform: SocialPlatform;
   url: string;
   username?: string;
+  is_visible?: boolean;
 }
 
 export const socialNetworksService = {

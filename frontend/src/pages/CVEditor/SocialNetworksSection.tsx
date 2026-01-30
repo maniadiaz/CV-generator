@@ -138,7 +138,7 @@ export default function SocialNetworksSection() {
       <Box mb={3}>
         <Button
           startIcon={<BackIcon />}
-          onClick={() => navigate(`/cv/${id}`)}
+          onClick={() => navigate(`/profiles/${id}/edit`)}
           sx={{ mb: 2 }}
         >
           {t('common.back')}

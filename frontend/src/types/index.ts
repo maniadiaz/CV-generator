@@ -141,6 +141,35 @@ export interface SocialNetwork {
   updated_at?: string;
 }
 
+export type TemplateName = 'harvard_classic' | 'harvard_modern';
+
+export interface Template {
+  name: TemplateName;
+  displayName: string;
+  category: string;
+  description: string;
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+  };
+  features: string[];
+  previewImage: string;
+}
+
+export interface ValidationWarning {
+  section: string;
+  message: string;
+  severity: 'low' | 'medium' | 'high';
+}
+
+export interface ValidationResult {
+  isValid: boolean;
+  completeness: number;
+  hasPersonalInfo: boolean;
+  warnings: ValidationWarning[];
+}
+
 export interface Project {
   id: string;
   name: string;

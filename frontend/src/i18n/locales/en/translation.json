@@ -25,7 +25,10 @@
     "saving": "Saving...",
     "saved": "Saved",
     "errorSaving": "Error saving",
-    "none": "None"
+    "none": "None",
+    "close": "Close",
+    "show": "Show",
+    "hide": "Hide"
   },
   "auth": {
     "login": "Login",
@@ -350,9 +353,53 @@
     "url": "URL (optional)",
     "github": "GitHub (optional)"
   },
+  "templates": {
+    "title": "Templates",
+    "selectTemplate": "Select Template",
+    "currentTemplate": "Current Template",
+    "applyTemplate": "Apply Template",
+    "changeSuccess": "Template changed successfully",
+    "features": "Features",
+    "previewNotAvailable": "Preview not available",
+    "errors": {
+      "loadFailed": "Error loading templates",
+      "changeFailed": "Error changing template"
+    }
+  },
+  "templatesAndExport": {
+    "title": "Templates and Export",
+    "description": "Select a template for your CV and export it to PDF"
+  },
+  "pdf": {
+    "title": "Export PDF",
+    "description": "Preview and download your CV in PDF format",
+    "preview": "Preview",
+    "export": "Export PDF",
+    "download": "Download",
+    "previewTitle": "CV Preview",
+    "previewNote": "If the PDF doesn't display, use the Download button",
+    "loading": "Loading...",
+    "exporting": "Exporting...",
+    "validProfile": "Your profile is complete and ready to export",
+    "invalidProfile": "Your profile is incomplete. Complete the information before exporting.",
+    "completeness": "Completeness",
+    "warnings": "Warnings",
+    "confirmExport": "Your CV is {{completeness}}% complete. Do you want to continue with the export?",
+    "severity": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    },
+    "errors": {
+      "previewFailed": "Error loading preview",
+      "exportFailed": "Error exporting PDF",
+      "incompleteProfile": "Complete personal information before exporting"
+    }
+  },
   "nav": {
     "dashboard": "Dashboard",
     "myProfiles": "My Profiles",
-    "editProfile": "Edit Profile"
+    "editProfile": "Edit Profile",
+    "templatesAndExport": "Templates & Export"
   }
 }

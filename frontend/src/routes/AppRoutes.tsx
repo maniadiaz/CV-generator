@@ -12,6 +12,7 @@ import SkillsSection from '@pages/CVEditor/SkillsSection';
 import LanguagesSection from '@pages/CVEditor/LanguagesSection';
 import CertificationsSection from '@pages/CVEditor/CertificationsSection';
 import SocialNetworksSection from '@pages/CVEditor/SocialNetworksSection';
+import TemplatesAndExport from '@pages/CVEditor/TemplatesAndExport';
 import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '@components/layout/MainLayout';
 
@@ -109,6 +110,17 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <MainLayout>
               <SocialNetworksSection />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/templates-export"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <TemplatesAndExport />
             </MainLayout>
           </ProtectedRoute>
         }
