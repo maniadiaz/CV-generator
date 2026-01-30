@@ -5,6 +5,14 @@ import VerifyEmail from '@pages/Auth/VerifyEmail';
 import ForgotPassword from '@pages/Auth/ForgotPassword';
 import ResetPassword from '@pages/Auth/ResetPassword';
 import Dashboard from '@pages/Dashboard/Dashboard';
+import ProfileEdit from '@pages/CVEditor/ProfileEdit';
+import ExperienceSection from '@pages/CVEditor/ExperienceSection';
+import EducationSection from '@pages/CVEditor/EducationSection';
+import SkillsSection from '@pages/CVEditor/SkillsSection';
+import LanguagesSection from '@pages/CVEditor/LanguagesSection';
+import CertificationsSection from '@pages/CVEditor/CertificationsSection';
+import SocialNetworksSection from '@pages/CVEditor/SocialNetworksSection';
+import TemplatesAndExport from '@pages/CVEditor/TemplatesAndExport';
 import ProtectedRoute from './ProtectedRoute';
 import MainLayout from '@components/layout/MainLayout';
 
@@ -25,6 +33,94 @@ const AppRoutes = () => {
           <ProtectedRoute>
             <MainLayout>
               <Dashboard />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/edit"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <ProfileEdit />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/experience"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <ExperienceSection />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/education"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <EducationSection />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/skills"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <SkillsSection />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/languages"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <LanguagesSection />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/certifications"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <CertificationsSection />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/social-networks"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <SocialNetworksSection />
+            </MainLayout>
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/profiles/:id/templates-export"
+        element={
+          <ProtectedRoute>
+            <MainLayout>
+              <TemplatesAndExport />
             </MainLayout>
           </ProtectedRoute>
         }

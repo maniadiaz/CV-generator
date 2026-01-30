@@ -24,13 +24,13 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Visibility as PreviewIcon,
-  Download as DownloadIcon,
 } from '@mui/icons-material';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
 import { fetchProfiles, deleteProfile } from '@redux/slices/profileSlice';
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
+import CreateProfileDialog from '@components/profile/CreateProfileDialog';
 
 const ProfileList = () => {
   const { t, i18n } = useTranslation();
@@ -39,6 +39,7 @@ const ProfileList = () => {
   const { profiles, loading } = useAppSelector((state) => state.profile);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
 
   const dateLocale = i18n.language === 'es' ? es : enUS;
 
@@ -47,7 +48,11 @@ const ProfileList = () => {
   }, [dispatch]);
 
   const handleCreateProfile = () => {
-    navigate('/profiles/new');
+    setCreateDialogOpen(true);
+  };
+
+  const handleCloseCreateDialog = () => {
+    setCreateDialogOpen(false);
   };
 
   const handleEditProfile = (id: number) => {
@@ -126,7 +131,7 @@ const ProfileList = () => {
       ) : (
         <Grid container spacing={3}>
           {Array.isArray(profiles) && profiles.map((profile) => (
-            <Grid item xs={12} md={6} lg={4} key={profile.id}>
+            <Grid key={profile.id} size={{ xs: 12, md: 6, lg: 4 }}>
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardContent sx={{ flexGrow: 1 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
@@ -206,6 +211,11 @@ const ProfileList = () => {
           ))}
         </Grid>
       )}
+
+      <CreateProfileDialog
+        open={createDialogOpen}
+        onClose={handleCloseCreateDialog}
+      />
 
       <Dialog
         open={deleteDialogOpen}

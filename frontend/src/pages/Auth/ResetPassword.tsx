@@ -42,7 +42,7 @@ const ResetPassword = () => {
   const { token } = useParams<{ token: string }>();
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [countdown, setCountdown] = useState(3);
+  const [countdown, setCountdown] = useState(5);
 
   const {
     control,
