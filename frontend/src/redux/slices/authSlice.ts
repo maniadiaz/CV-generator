@@ -120,9 +120,6 @@ const authSlice = createSlice({
         state.isAuthenticated = false;
         state.token = null;
         state.user = null;
-        state.isAuthenticated = false;
-        state.token = null;
-        state.user = null;
         state.error = null;
       })
       .addCase(register.rejected, (state, action) => {

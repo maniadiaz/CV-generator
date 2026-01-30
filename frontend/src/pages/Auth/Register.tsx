@@ -113,12 +113,8 @@ const Register = () => {
       // Exclude confirmPassword from the data sent to the backend
       const { confirmPassword, ...registerData } = data;
       await dispatch(registerAction(registerData)).unwrap();
-      // Show success message
+      // Show success message and start countdown (handled by useEffect)
       setRegistrationSuccess(true);
-      // Redirect to login after 3 seconds
-      setTimeout(() => {
-        navigate('/login');
-      }, 3000);
     } catch (err: any) {
       setError(err || t('auth.registerError'));
     }
