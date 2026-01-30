@@ -77,27 +77,44 @@ export interface Education {
   display_order?: number;
 }
 
+export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert' | 'master';
+
 export interface Skill {
-  id: string;
+  id: number;
   name: string;
   category: string;
-  level: 'beginner' | 'intermediate' | 'advanced' | 'expert';
+  proficiency_level: SkillLevel;
+  years_of_experience?: number;
+  is_visible?: boolean;
+  display_order?: number;
 }
 
+export type LanguageLevel = 'basic' | 'intermediate' | 'advanced' | 'fluent' | 'native';
+
 export interface Language {
-  id: string;
+  id: number;
   name: string;
-  level: 'basic' | 'intermediate' | 'advanced' | 'native';
+  proficiency_level: LanguageLevel;
+  certification_name?: string;
+  certification_score?: string;
+  is_visible?: boolean;
+  display_order?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Certificate {
-  id: string;
+  id: number;
   name: string;
-  issuer: string;
-  date: string;
-  expirationDate?: string;
-  credentialId?: string;
-  url?: string;
+  issuing_organization: string;
+  issue_date: string;
+  expiration_date?: string;
+  credential_id?: string;
+  credential_url?: string;
+  is_visible?: boolean;
+  display_order?: number;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface Project {

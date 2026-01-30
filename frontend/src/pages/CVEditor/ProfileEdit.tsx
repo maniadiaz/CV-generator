@@ -11,14 +11,21 @@ import {
   Alert,
   Card,
   CardContent,
+  Grid,
 } from '@mui/material';
-import { ArrowBack as BackIcon } from '@mui/icons-material';
+import {
+  ArrowBack as BackIcon,
+  Work as WorkIcon,
+  School as SchoolIcon,
+  EmojiObjects as SkillsIcon,
+  Language as LanguageIcon,
+  CardMembership as CertificateIcon,
+} from '@mui/icons-material';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
 import { fetchProfileById, updateProfileCompletion } from '@redux/slices/profileSlice';
 import PersonalInfoForm from '@components/profile/PersonalInfoForm';
-import EducationForm from '@components/profile/EducationForm';
-import ExperienceForm from '@components/profile/ExperienceForm';
+import SectionCard from '@components/profile/SectionCard';
 
 const ProfileEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -130,27 +137,57 @@ const ProfileEdit = () => {
         />
       </Paper>
 
-      {/* Experience Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          {t('experience.title')}
-        </Typography>
-        <ExperienceForm
-          profileId={currentProfile.id}
-          onSaveSuccess={handleSaveSuccess}
-        />
-      </Paper>
-
-      {/* Education Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          {t('education.title')}
-        </Typography>
-        <EducationForm
-          profileId={currentProfile.id}
-          onSaveSuccess={handleSaveSuccess}
-        />
-      </Paper>
+      {/* CV Sections Cards */}
+      <Typography variant="h5" gutterBottom sx={{ mt: 4, mb: 2 }}>
+        {t('profile.cvSections')}
+      </Typography>
+      <Grid container spacing={3}>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <SectionCard
+            title={t('experience.title')}
+            description={t('experience.sectionDescription')}
+            icon={WorkIcon}
+            path={`/profiles/${id}/experience`}
+            color="primary"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <SectionCard
+            title={t('education.title')}
+            description={t('education.sectionDescription')}
+            icon={SchoolIcon}
+            path={`/profiles/${id}/education`}
+            color="success"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <SectionCard
+            title={t('skills.title')}
+            description={t('skills.sectionDescription')}
+            icon={SkillsIcon}
+            path={`/profiles/${id}/skills`}
+            color="info"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <SectionCard
+            title={t('languages.title')}
+            description={t('languages.sectionDescription')}
+            icon={LanguageIcon}
+            path={`/profiles/${id}/languages`}
+            color="warning"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <SectionCard
+            title={t('certificates.title')}
+            description={t('certificates.sectionDescription')}
+            icon={CertificateIcon}
+            path={`/profiles/${id}/certifications`}
+            color="secondary"
+          />
+        </Grid>
+      </Grid>
     </Container>
   );
 };
