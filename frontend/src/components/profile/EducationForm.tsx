@@ -98,7 +98,11 @@ const EducationForm = ({ profileId, onSaveSuccess }: EducationFormProps) => {
       setLoading(true);
       setError(null);
       const data = await educationService.getEducation(profileId);
-      setEducationList(data);
+      if (data && Array.isArray(data)) {
+        setEducationList(data);
+      } else {
+        setEducationList([]);
+      }
     } catch (err: any) {
       if (err.response?.status !== 404) {
         setError(err.response?.data?.message || t('common.error'));
@@ -159,34 +163,18 @@ const EducationForm = ({ profileId, onSaveSuccess }: EducationFormProps) => {
   };
 
   const onSubmit = async (data: CreateEducationData) => {
-    console.log('=== EDUCATION FORM SUBMIT ===');
-    console.log('Profile ID:', profileId);
-    console.log('Editing ID:', editingId);
-    console.log('Form Data:', data);
-
     try {
       setError(null);
-      let response;
       if (editingId) {
-        console.log('Updating education...');
-        response = await educationService.updateEducation(profileId, editingId, data);
-        console.log('Update response:', response);
+        await educationService.updateEducation(profileId, editingId, data);
       } else {
-        console.log('Creating education...');
-        response = await educationService.createEducation(profileId, data);
-        console.log('Create response:', response);
+        await educationService.createEducation(profileId, data);
       }
-
-      console.log('Reloading education list...');
       await loadEducation();
-      console.log('Education saved successfully!');
-
       onSaveSuccess?.();
       setDialogOpen(false);
       reset();
     } catch (err: any) {
-      console.error('Error saving education:', err);
-      console.error('Error response:', err.response);
       setError(err.response?.data?.message || t('education.saveError'));
     }
   };

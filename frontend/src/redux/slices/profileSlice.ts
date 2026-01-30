@@ -306,7 +306,10 @@ const profileSlice = createSlice({
     builder
       .addCase(updateProfileCompletion.fulfilled, (state, action) => {
         if (state.currentProfile && state.currentProfile.id === action.payload.id) {
-          state.currentProfile.completion_percentage = action.payload.completion_percentage;
+          // Only update if the value is a valid number
+          if (typeof action.payload.completion_percentage === 'number') {
+            state.currentProfile.completion_percentage = action.payload.completion_percentage;
+          }
         }
       });
   },

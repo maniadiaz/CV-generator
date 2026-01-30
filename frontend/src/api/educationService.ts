@@ -2,7 +2,7 @@ import api from './axios';
 import type { Education, ApiResponse } from '@app-types/index';
 
 interface EducationListResponse {
-  education: Education[];
+  educations: Education[];
 }
 
 interface EducationResponse {
@@ -24,7 +24,7 @@ export const educationService = {
   // Get all education entries for a profile
   getEducation: async (profileId: number): Promise<Education[]> => {
     const response = await api.get<ApiResponse<EducationListResponse>>(`/api/profiles/${profileId}/education`);
-    return response.data.data.education;
+    return response.data.data.educations;
   },
 
   // Create new education entry

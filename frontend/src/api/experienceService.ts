@@ -2,7 +2,7 @@ import api from './axios';
 import type { Experience, ApiResponse } from '@app-types/index';
 
 interface ExperienceListResponse {
-  experience: Experience[];
+  experiences: Experience[];
 }
 
 interface ExperienceResponse {
@@ -24,7 +24,7 @@ export const experienceService = {
   // Get all experience entries for a profile
   getExperience: async (profileId: number): Promise<Experience[]> => {
     const response = await api.get<ApiResponse<ExperienceListResponse>>(`/api/profiles/${profileId}/experience`);
-    return response.data.data.experience;
+    return response.data.data.experiences;
   },
 
   // Create new experience entry

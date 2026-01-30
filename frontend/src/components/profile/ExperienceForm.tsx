@@ -98,7 +98,11 @@ const ExperienceForm = ({ profileId, onSaveSuccess }: ExperienceFormProps) => {
       setLoading(true);
       setError(null);
       const data = await experienceService.getExperience(profileId);
-      setExperienceList(data);
+      if (data && Array.isArray(data)) {
+        setExperienceList(data);
+      } else {
+        setExperienceList([]);
+      }
     } catch (err: any) {
       if (err.response?.status !== 404) {
         setError(err.response?.data?.message || t('common.error'));
@@ -159,34 +163,18 @@ const ExperienceForm = ({ profileId, onSaveSuccess }: ExperienceFormProps) => {
   };
 
   const onSubmit = async (data: CreateExperienceData) => {
-    console.log('=== EXPERIENCE FORM SUBMIT ===');
-    console.log('Profile ID:', profileId);
-    console.log('Editing ID:', editingId);
-    console.log('Form Data:', data);
-
     try {
       setError(null);
-      let response;
       if (editingId) {
-        console.log('Updating experience...');
-        response = await experienceService.updateExperience(profileId, editingId, data);
-        console.log('Update response:', response);
+        await experienceService.updateExperience(profileId, editingId, data);
       } else {
-        console.log('Creating experience...');
-        response = await experienceService.createExperience(profileId, data);
-        console.log('Create response:', response);
+        await experienceService.createExperience(profileId, data);
       }
-
-      console.log('Reloading experience list...');
       await loadExperience();
-      console.log('Experience saved successfully!');
-
       onSaveSuccess?.();
       setDialogOpen(false);
       reset();
     } catch (err: any) {
-      console.error('Error saving experience:', err);
-      console.error('Error response:', err.response);
       setError(err.response?.data?.message || t('experience.saveError'));
     }
   };
