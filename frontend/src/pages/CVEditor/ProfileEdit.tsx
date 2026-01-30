@@ -20,6 +20,7 @@ import {
   EmojiObjects as SkillsIcon,
   Language as LanguageIcon,
   CardMembership as CertificateIcon,
+  Group as SocialIcon,
 } from '@mui/icons-material';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
@@ -185,6 +186,15 @@ const ProfileEdit = () => {
             icon={CertificateIcon}
             path={`/profiles/${id}/certifications`}
             color="secondary"
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+          <SectionCard
+            title={t('socialNetworks.title')}
+            description={t('socialNetworks.sectionDescription')}
+            icon={SocialIcon}
+            path={`/profiles/${id}/social-networks`}
+            color="primary"
           />
         </Grid>
       </Grid>

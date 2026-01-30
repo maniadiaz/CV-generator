@@ -301,6 +301,43 @@
     "valid": "Válida",
     "viewCredential": "Ver credencial"
   },
+  "socialNetworks": {
+    "title": "Redes Sociales",
+    "sectionDescription": "Agrega tus redes sociales y enlaces profesionales",
+    "description": "Gestiona tus perfiles en redes sociales y sitios profesionales",
+    "addButton": "Agregar Red Social",
+    "addTitle": "Agregar Red Social",
+    "editTitle": "Editar Red Social",
+    "addFirst": "Agregar primera red social",
+    "deleteConfirm": "¿Estás seguro de eliminar esta red social?",
+    "platform": "Plataforma",
+    "url": "URL",
+    "username": "Usuario (opcional)",
+    "urlHelp": "Ingresa la URL completa de tu perfil",
+    "usernameHelp": "Tu nombre de usuario en esta plataforma",
+    "empty": "No has agregado redes sociales aún",
+    "platforms": {
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "gitlab": "GitLab",
+      "twitter": "Twitter",
+      "portfolio": "Portafolio",
+      "stackoverflow": "Stack Overflow",
+      "medium": "Medium",
+      "youtube": "YouTube",
+      "behance": "Behance",
+      "dribbble": "Dribbble",
+      "other": "Otro"
+    },
+    "errors": {
+      "urlRequired": "La URL es requerida",
+      "invalidUrl": "URL inválida. Debe comenzar con https://",
+      "saveFailed": "Error al guardar la red social",
+      "updateFailed": "Error al actualizar la red social",
+      "deleteFailed": "Error al eliminar la red social",
+      "loadFailed": "Error al cargar las redes sociales"
+    }
+  },
   "projects": {
     "title": "Proyectos",
     "addProject": "Agregar Proyecto",

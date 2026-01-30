@@ -301,6 +301,43 @@
     "valid": "Valid",
     "viewCredential": "View credential"
   },
+  "socialNetworks": {
+    "title": "Social Networks",
+    "sectionDescription": "Add your social networks and professional links",
+    "description": "Manage your social media profiles and professional sites",
+    "addButton": "Add Social Network",
+    "addTitle": "Add Social Network",
+    "editTitle": "Edit Social Network",
+    "addFirst": "Add first social network",
+    "deleteConfirm": "Are you sure you want to delete this social network?",
+    "platform": "Platform",
+    "url": "URL",
+    "username": "Username (optional)",
+    "urlHelp": "Enter the full URL of your profile",
+    "usernameHelp": "Your username on this platform",
+    "empty": "You haven't added any social networks yet",
+    "platforms": {
+      "linkedin": "LinkedIn",
+      "github": "GitHub",
+      "gitlab": "GitLab",
+      "twitter": "Twitter",
+      "portfolio": "Portfolio",
+      "stackoverflow": "Stack Overflow",
+      "medium": "Medium",
+      "youtube": "YouTube",
+      "behance": "Behance",
+      "dribbble": "Dribbble",
+      "other": "Other"
+    },
+    "errors": {
+      "urlRequired": "URL is required",
+      "invalidUrl": "Invalid URL. Must start with https://",
+      "saveFailed": "Error saving social network",
+      "updateFailed": "Error updating social network",
+      "deleteFailed": "Error deleting social network",
+      "loadFailed": "Error loading social networks"
+    }
+  },
   "projects": {
     "title": "Projects",
     "addProject": "Add Project",

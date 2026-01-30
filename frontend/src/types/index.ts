@@ -117,6 +117,30 @@ export interface Certificate {
   updated_at?: string;
 }
 
+export type SocialPlatform =
+  | 'linkedin'
+  | 'github'
+  | 'gitlab'
+  | 'twitter'
+  | 'portfolio'
+  | 'stackoverflow'
+  | 'medium'
+  | 'youtube'
+  | 'behance'
+  | 'dribbble'
+  | 'other';
+
+export interface SocialNetwork {
+  id: number;
+  platform: SocialPlatform;
+  url: string;
+  username?: string;
+  is_visible?: boolean;
+  display_order?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Project {
   id: string;
   name: string;
@@ -147,6 +171,7 @@ export interface CVProfile {
   skills?: Skill[];
   languages?: Language[];
   certificates?: Certificate[];
+  socialNetworks?: SocialNetwork[];
   projects?: Project[];
 }
 
