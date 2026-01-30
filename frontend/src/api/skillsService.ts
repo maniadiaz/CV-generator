@@ -13,6 +13,19 @@ interface CategoryResponse {
   categories: string[];
 }
 
+export interface SkillCategory {
+  value: string;
+  label: string;
+  description: string;
+  icon: string;
+  examples: string[];
+}
+
+interface CategoriesDetailedResponse {
+  categories: SkillCategory[];
+  total: number;
+}
+
 interface StatsResponse {
   total_skills: number;
   by_category: Record<string, number>;
@@ -68,9 +81,15 @@ export const skillsService = {
     await api.post(`/api/profiles/${profileId}/skills/reorder`, { ordered_ids: orderedIds });
   },
 
-  // Get skill categories
+  // Get skill categories (legacy - returns only strings)
   getCategories: async (profileId: number): Promise<string[]> => {
     const response = await api.get<ApiResponse<CategoryResponse>>(`/api/profiles/${profileId}/skills/categories`);
+    return response.data.data.categories;
+  },
+
+  // Get skill categories with full details (new)
+  getCategoriesDetailed: async (profileId: number): Promise<SkillCategory[]> => {
+    const response = await api.get<ApiResponse<CategoriesDetailedResponse>>(`/api/profiles/${profileId}/skills/categories`);
     return response.data.data.categories;
   },
 

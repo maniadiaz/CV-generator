@@ -38,7 +38,7 @@ import type { DropResult } from '@hello-pangea/dnd';
 import { useTranslation } from 'react-i18next';
 import type { Skill } from '@app-types/index';
 import { skillsService } from '@api/skillsService';
-import type { CreateSkillData } from '@api/skillsService';
+import type { CreateSkillData, SkillCategory } from '@api/skillsService';
 
 const schema = yup.object().shape({
   name: yup.string().required('skills.nameRequired'),
@@ -82,7 +82,8 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
   const [editingId, setEditingId] = useState<number | null>(null);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<SkillCategory[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -127,23 +128,36 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
   };
 
   const loadCategories = async () => {
-    // Categorías predefinidas del backend
-    const predefinedCategories = [
-      'programming_languages',
-      'frameworks_libraries',
-      'databases',
-      'cloud_devops',
-      'tools',
-      'soft_skills',
-      'other'
+    // Categorías predefinidas como fallback (las 7 originales)
+    const fallbackCategories: SkillCategory[] = [
+      { value: 'programming_languages', label: 'Lenguajes de Programación', description: '', icon: 'code', examples: [] },
+      { value: 'frameworks_libraries', label: 'Frameworks y Librerías', description: '', icon: 'library', examples: [] },
+      { value: 'databases', label: 'Bases de Datos', description: '', icon: 'database', examples: [] },
+      { value: 'cloud_devops', label: 'Cloud y DevOps', description: '', icon: 'cloud', examples: [] },
+      { value: 'tools', label: 'Herramientas', description: '', icon: 'tool', examples: [] },
+      { value: 'soft_skills', label: 'Habilidades Blandas', description: '', icon: 'people', examples: [] },
+      { value: 'other', label: 'Otros', description: '', icon: 'more', examples: [] }
     ];
 
     try {
-      const data = await skillsService.getCategories(profileId);
-      setCategories(data && data.length > 0 ? data : predefinedCategories);
-    } catch (err) {
-      // Si el endpoint no existe, usar categorías predefinidas
-      setCategories(predefinedCategories);
+      setLoadingCategories(true);
+      const data = await skillsService.getCategoriesDetailed(profileId);
+      console.log('✅ Categories loaded from API:', data);
+      setCategories(data && data.length > 0 ? data : fallbackCategories);
+    } catch (err: any) {
+      // Si el endpoint no existe o falla, usar categorías predefinidas como fallback
+      console.warn('⚠️ Failed to load categories from API, using fallback (7 categories):', err?.response?.data || err?.message);
+      console.info('💡 Backend needs to implement the endpoint: GET /api/profiles/:profileId/skills/categories');
+      console.info('📝 Expected response format:', {
+        success: true,
+        data: {
+          categories: [{ value: 'string', label: 'string', description: 'string', icon: 'string', examples: ['string'] }],
+          total: 33
+        }
+      });
+      setCategories(fallbackCategories);
+    } finally {
+      setLoadingCategories(false);
     }
   };
 
@@ -278,7 +292,12 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
   }
 
   return (
-    <Box sx={{ width: '100%', overflow: 'hidden' }}>
+    <Box sx={{
+      width: '100%',
+      overflow: 'hidden',
+      maxWidth: { xs: 350, sm: '100%' },
+      mx: 'auto'
+    }}>
       {error && (
         <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
           {error}
@@ -336,9 +355,16 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
             }}
           >
             <Tab label={t('skills.allCategories')} value="all" />
-            {uniqueCategories.map((category) => (
-              <Tab key={category} label={t(`skills.categories.${category}`)} value={category} />
-            ))}
+            {uniqueCategories.map((category) => {
+              const categoryDetails = categories.find(cat => cat.value === category);
+              return (
+                <Tab
+                  key={category}
+                  label={categoryDetails?.label || t(`skills.categories.${category}`)}
+                  value={category}
+                />
+              );
+            })}
           </Tabs>
         </Box>
       )}
@@ -375,6 +401,8 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
                           mb: 2,
                           bgcolor: snapshot.isDragging ? 'action.hover' : 'background.paper',
                           overflow: 'hidden',
+                          maxWidth: "100%",
+                          mx: 'auto',
                         }}
                       >
                         <CardContent sx={{ p: { xs: 1.5, sm: 2 }, '&:last-child': { pb: { xs: 1.5, sm: 2 } } }}>
@@ -424,7 +452,10 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
                                     {skill.name}
                                   </Typography>
                                   <Chip
-                                    label={t(`skills.categories.${skill.category}`)}
+                                    label={
+                                      categories.find(cat => cat.value === skill.category)?.label ||
+                                      t(`skills.categories.${skill.category}`)
+                                    }
                                     size="small"
                                     color="primary"
                                     variant="outlined"
@@ -575,16 +606,19 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
                         select
                         label={t('skills.category')}
                         error={!!errors.category}
+                        disabled={loadingCategories}
                         helperText={
-                          errors.category
+                          loadingCategories
+                            ? 'Cargando categorías...'
+                            : errors.category
                             ? t(errors.category.message as string)
                             : t('skills.categoryHelper')
                         }
                         size="small"
                       >
                         {categories.map((category) => (
-                          <MenuItem key={category} value={category}>
-                            {t(`skills.categories.${category}`)}
+                          <MenuItem key={category.value} value={category.value}>
+                            {category.label}
                           </MenuItem>
                         ))}
                       </TextField>
