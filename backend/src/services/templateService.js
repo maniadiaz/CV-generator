@@ -11,7 +11,7 @@ class TemplateService {
         displayName: 'Harvard Classic',
         description: 'Plantilla tradicional inspirada en el formato Harvard',
         category: 'professional',
-        previewImage: '/templates/previews/harvard-classic.png',
+        previewImage: '/templates/previews/harvard_classic.png',
         colors: {
           primary: '#A51C30',   // Harvard Crimson
           secondary: '#000000',
@@ -24,7 +24,7 @@ class TemplateService {
         displayName: 'Harvard Modern',
         description: 'Versión moderna del estilo Harvard con elementos contemporáneos',
         category: 'professional',
-        previewImage: '/templates/previews/harvard-modern.png',
+        previewImage: '/templates/previews/harvard_modern.png',
         colors: {
           primary: '#A51C30',   // Harvard Crimson
           secondary: '#2C3E50',

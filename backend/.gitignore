@@ -23,9 +23,16 @@ dist-ssr
 *.sln
 *.sw?
 
-#export
-*.pdf
-previews*
+# Exports y previews
+exports/*
+!exports/.gitkeep
+
+# Previews de HTML generados por tests
+previews/*.html
+
+# Template preview images (se generan con: npm run generate:previews)
+public/templates/previews/*.png
+!public/templates/previews/.gitkeep
 
 *.env
 
