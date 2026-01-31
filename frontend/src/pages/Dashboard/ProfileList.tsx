@@ -60,7 +60,8 @@ const ProfileList = () => {
   };
 
   const handlePreviewProfile = (id: number) => {
-    navigate(`/profiles/${id}/preview`);
+    // Redirect to templates-export page where user can preview and download CV
+    navigate(`/profiles/${id}/templates-export`);
   };
 
   const handleDeleteClick = (id: number) => {
