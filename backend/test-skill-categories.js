@@ -7,7 +7,7 @@ const axios = require('axios');
 
 const API_URL = process.env.API_URL || 'http://localhost:5001';
 const TEST_EMAIL = 'miguelalexisdi18@gmail.com';
-const TEST_PASSWORD = 'Password123!';
+const TEST_PASSWORD = 'Alexis185diaz2000';
 
 async function testSkillCategories() {
   console.log('🧪 Probando nuevos endpoints de categorías de skills...\n');
