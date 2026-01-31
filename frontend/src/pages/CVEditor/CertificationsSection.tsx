@@ -15,6 +15,7 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
 import { fetchProfileById, updateProfileCompletion } from '@redux/slices/profileSlice';
 import CertificationsForm from '@components/profile/CertificationsForm';
+import ProfileCompletionCard from '@components/profile/ProfileCompletionCard';
 
 const CertificationsSection = () => {
   const { id } = useParams<{ id: string }>();
@@ -77,6 +78,10 @@ const CertificationsSection = () => {
           {t('certificates.title')}
         </Typography>
       </Box>
+
+      <ProfileCompletionCard
+        completionPercentage={currentProfile.completion_percentage || 0}
+      />
 
       <Paper sx={{ p: 3 }}>
         <CertificationsForm

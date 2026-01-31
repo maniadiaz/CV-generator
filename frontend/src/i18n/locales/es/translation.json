@@ -229,6 +229,12 @@
     "saveError": "Error al guardar la habilidad",
     "deleteError": "Error al eliminar la habilidad",
     "reorderError": "Error al reordenar las habilidades",
+    "languageSkillHelper": "Selecciona el tipo de habilidad de idioma",
+    "languageSkills": {
+      "translation": "Traducción",
+      "interpretation": "Interpretación",
+      "technicalWriting": "Redacción Técnica"
+    },
     "categories": {
       "programming_languages": "Lenguajes de Programación",
       "frameworks_libraries": "Frameworks y Librerías",

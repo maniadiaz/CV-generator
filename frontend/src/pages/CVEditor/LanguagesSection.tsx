@@ -15,6 +15,7 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
 import { fetchProfileById, updateProfileCompletion } from '@redux/slices/profileSlice';
 import LanguagesForm from '@components/profile/LanguagesForm';
+import ProfileCompletionCard from '@components/profile/ProfileCompletionCard';
 
 const LanguagesSection = () => {
   const { id } = useParams<{ id: string }>();
@@ -77,6 +78,10 @@ const LanguagesSection = () => {
           {t('languages.title')}
         </Typography>
       </Box>
+
+      <ProfileCompletionCard
+        completionPercentage={currentProfile.completion_percentage || 0}
+      />
 
       <Paper sx={{ p: 3 }}>
         <LanguagesForm

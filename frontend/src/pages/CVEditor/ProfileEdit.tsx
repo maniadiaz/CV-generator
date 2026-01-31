@@ -9,8 +9,6 @@ import {
   Button,
   LinearProgress,
   Alert,
-  Card,
-  CardContent,
   Grid,
 } from '@mui/material';
 import {
@@ -27,6 +25,7 @@ import { useAppDispatch } from '@hooks/useAppDispatch';
 import { fetchProfileById, updateProfileCompletion } from '@redux/slices/profileSlice';
 import PersonalInfoForm from '@components/profile/PersonalInfoForm';
 import SectionCard from '@components/profile/SectionCard';
+import ProfileCompletionCard from '@components/profile/ProfileCompletionCard';
 
 const ProfileEdit = () => {
   const { id } = useParams<{ id: string }>();
@@ -50,12 +49,6 @@ const ProfileEdit = () => {
 
   const handleBack = () => {
     navigate('/dashboard');
-  };
-
-  const getCompletionColor = (percentage: number) => {
-    if (percentage < 30) return 'error';
-    if (percentage < 70) return 'warning';
-    return 'success';
   };
 
   if (loading) {
@@ -106,26 +99,9 @@ const ProfileEdit = () => {
       </Box>
 
       {/* Completion Progress Card */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            {t('profile.completion')}
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <Box sx={{ flexGrow: 1 }}>
-              <LinearProgress
-                variant="determinate"
-                value={currentProfile.completion_percentage || 0}
-                color={getCompletionColor(currentProfile.completion_percentage || 0)}
-                sx={{ height: 10, borderRadius: 5 }}
-              />
-            </Box>
-            <Typography variant="h6" color="text.secondary">
-              {currentProfile.completion_percentage || 0}%
-            </Typography>
-          </Box>
-        </CardContent>
-      </Card>
+      <ProfileCompletionCard
+        completionPercentage={currentProfile.completion_percentage || 0}
+      />
 
       {/* Personal Info Section */}
       <Paper sx={{ p: 3, mb: 3 }}>

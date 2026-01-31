@@ -40,6 +40,13 @@ import type { Skill } from '@app-types/index';
 import { skillsService } from '@api/skillsService';
 import type { CreateSkillData, SkillCategory } from '@api/skillsService';
 
+// Claves de traducción para las opciones de habilidades de idiomas
+const LANGUAGE_SKILL_KEYS = [
+  'translation',
+  'interpretation',
+  'technicalWriting'
+];
+
 const schema = yup.object().shape({
   name: yup.string().required('skills.nameRequired'),
   category: yup.string().required('skills.categoryRequired'),
@@ -91,6 +98,8 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
     control,
     handleSubmit,
     reset,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<CreateSkillData>({
     resolver: yupResolver(schema) as any,
@@ -106,6 +115,16 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
     loadSkills();
     loadCategories();
   }, [profileId]);
+
+  // Limpiar el campo "name" cuando cambia la categoría
+  useEffect(() => {
+    const subscription = watch((_, { name }) => {
+      if (name === 'category') {
+        setValue('name', '');
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, setValue]);
 
   const loadSkills = async () => {
     try {
@@ -142,7 +161,6 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
     try {
       setLoadingCategories(true);
       const data = await skillsService.getCategoriesDetailed(profileId);
-      console.log('✅ Categories loaded from API:', data);
       setCategories(data && data.length > 0 ? data : fallbackCategories);
     } catch (err: any) {
       // Si el endpoint no existe o falla, usar categorías predefinidas como fallback
@@ -582,16 +600,46 @@ const SkillsForm = ({ profileId, onSaveSuccess }: SkillsFormProps) => {
                   <Controller
                     name="name"
                     control={control}
-                    render={({ field }) => (
-                      <TextField
-                        {...field}
-                        fullWidth
-                        label={t('skills.name')}
-                        error={!!errors.name}
-                        helperText={errors.name ? t(errors.name.message as string) : ''}
-                        size="small"
-                      />
-                    )}
+                    render={({ field }) => {
+                      const selectedCategory = watch('category');
+
+                      // Si la categoría es "languages", mostrar Select con opciones predefinidas
+                      if (selectedCategory === 'languages') {
+                        return (
+                          <TextField
+                            {...field}
+                            select
+                            fullWidth
+                            label={t('skills.name')}
+                            error={!!errors.name}
+                            helperText={
+                              errors.name
+                                ? t(errors.name.message as string)
+                                : t('skills.languageSkillHelper')
+                            }
+                            size="small"
+                          >
+                            {LANGUAGE_SKILL_KEYS.map((key) => (
+                              <MenuItem key={key} value={t(`skills.languageSkills.${key}`)}>
+                                {t(`skills.languageSkills.${key}`)}
+                              </MenuItem>
+                            ))}
+                          </TextField>
+                        );
+                      }
+
+                      // Para otras categorías, mostrar campo de texto normal
+                      return (
+                        <TextField
+                          {...field}
+                          fullWidth
+                          label={t('skills.name')}
+                          error={!!errors.name}
+                          helperText={errors.name ? t(errors.name.message as string) : ''}
+                          size="small"
+                        />
+                      );
+                    }}
                   />
                 </Grid>
 

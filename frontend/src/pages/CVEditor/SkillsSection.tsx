@@ -15,6 +15,7 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
 import { fetchProfileById, updateProfileCompletion } from '@redux/slices/profileSlice';
 import SkillsForm from '@components/profile/SkillsForm';
+import ProfileCompletionCard from '@components/profile/ProfileCompletionCard';
 
 const SkillsSection = () => {
   const { id } = useParams<{ id: string }>();
@@ -83,6 +84,10 @@ const SkillsSection = () => {
         </Button>
         <Typography variant="h4">{t('skills.title')}</Typography>
       </Box>
+
+      <ProfileCompletionCard
+        completionPercentage={currentProfile.completion_percentage || 0}
+      />
 
       <Paper sx={{ p: 3 }}>
         <SkillsForm

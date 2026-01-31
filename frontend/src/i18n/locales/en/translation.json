@@ -229,6 +229,12 @@
     "saveError": "Error saving skill",
     "deleteError": "Error deleting skill",
     "reorderError": "Error reordering skills",
+    "languageSkillHelper": "Select the type of language skill",
+    "languageSkills": {
+      "translation": "Translation",
+      "interpretation": "Interpretation",
+      "technicalWriting": "Technical Writing"
+    },
     "categories": {
       "programming_languages": "Programming Languages",
       "frameworks_libraries": "Frameworks & Libraries",

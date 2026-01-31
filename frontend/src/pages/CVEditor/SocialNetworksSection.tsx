@@ -33,6 +33,8 @@ import { updateProfileCompletion } from '@redux/slices/profileSlice';
 import { useAppDispatch } from '@hooks/useAppDispatch';
 import type { SocialNetwork, SocialPlatform } from '@app-types/index';
 import SocialNetworksForm from '@components/profile/SocialNetworksForm';
+import ProfileCompletionCard from '@components/profile/ProfileCompletionCard';
+import { useAppSelector } from '@hooks/useAppSelector';
 
 const PLATFORM_ICONS: Record<SocialPlatform, React.ReactNode> = {
   linkedin: <LinkedInIcon />,
@@ -54,6 +56,7 @@ export default function SocialNetworksSection() {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const profileId = Number(id);
+  const { currentProfile } = useAppSelector((state) => state.profile);
 
   const [socialNetworks, setSocialNetworks] = useState<SocialNetwork[]>([]);
   const [loading, setLoading] = useState(true);
@@ -159,6 +162,12 @@ export default function SocialNetworksSection() {
           {t('socialNetworks.description')}
         </Typography>
       </Box>
+
+      {currentProfile && (
+        <ProfileCompletionCard
+          completionPercentage={currentProfile.completion_percentage || 0}
+        />
+      )}
 
       {loading && <LinearProgress sx={{ mb: 2 }} />}
       {error && (

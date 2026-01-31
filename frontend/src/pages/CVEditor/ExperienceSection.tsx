@@ -15,6 +15,7 @@ import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
 import { fetchProfileById, updateProfileCompletion } from '@redux/slices/profileSlice';
 import ExperienceForm from '@components/profile/ExperienceForm';
+import ProfileCompletionCard from '@components/profile/ProfileCompletionCard';
 
 const ExperienceSection = () => {
   const { id } = useParams<{ id: string }>();
@@ -83,6 +84,10 @@ const ExperienceSection = () => {
         </Button>
         <Typography variant="h4">{t('experience.title')}</Typography>
       </Box>
+
+      <ProfileCompletionCard
+        completionPercentage={currentProfile.completion_percentage || 0}
+      />
 
       <Paper sx={{ p: 3 }}>
         <ExperienceForm
