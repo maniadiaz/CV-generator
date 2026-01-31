@@ -24,17 +24,45 @@ module.exports = (sequelize) => {
     },
     category: {
       type: DataTypes.ENUM(
+        // Tecnología (5)
         'programming_languages',
         'frameworks_libraries',
         'databases',
         'cloud_devops',
-        'tools',
+        'mobile_development',
+        // Diseño y Creatividad (3)
+        'design_tools',
+        'multimedia',
+        'graphic_design',
+        // Negocios (4)
+        'project_management',
+        'business_analysis',
+        'marketing_digital',
+        'sales',
+        // Finanzas (2)
+        'accounting',
+        'finance',
+        // Otros Sectores (16)
+        'human_resources',
+        'healthcare',
+        'laboratory',
+        'teaching',
+        'legal',
+        'operations',
+        'logistics',
+        'architecture',
+        'engineering',
+        'communication',
+        'social_media',
+        'customer_service',
+        'office_tools',
         'soft_skills',
+        'languages',
         'other'
       ),
       allowNull: false,
       defaultValue: 'other',
-      comment: 'Categoría de la habilidad'
+      comment: 'Categoría de la habilidad (33 categorías disponibles)'
     },
     proficiency_level: {
       type: DataTypes.ENUM('beginner', 'intermediate', 'advanced', 'expert'),

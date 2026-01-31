@@ -137,47 +137,71 @@ Actualizada la documentación para frontend con:
 - `other` ✅ Sigue existiendo
 
 ### **¿Necesito actualizar la base de datos?**
-**Depende del modelo:**
+**SÍ - El modelo usa ENUM.**
 
-**Si el modelo Skill tiene enum en la DB:**
-```sql
-ALTER TABLE skills
-MODIFY COLUMN category ENUM(
-  'programming_languages',
-  'frameworks_libraries',
-  'databases',
-  'cloud_devops',
-  'mobile_development',
-  'design_tools',
-  'multimedia',
-  'graphic_design',
-  'project_management',
-  'business_analysis',
-  'marketing_digital',
-  'sales',
-  'accounting',
-  'finance',
-  'human_resources',
-  'healthcare',
-  'laboratory',
-  'teaching',
-  'legal',
-  'operations',
-  'logistics',
-  'architecture',
-  'engineering',
-  'communication',
-  'social_media',
-  'customer_service',
-  'office_tools',
-  'soft_skills',
-  'languages',
-  'other'
-);
-```
+**⚠️ IMPORTANTE: Debes ejecutar la migración SQL antes de usar las nuevas categorías.**
 
-**Si el modelo usa VARCHAR:**
-No se necesita ningún cambio en la base de datos. ✅
+**Pasos:**
+
+1. **Hacer backup de la base de datos:**
+   ```bash
+   mysqldump -u usuario -p nombre_db > backup_$(date +%Y%m%d_%H%M%S).sql
+   ```
+
+2. **Ejecutar el script de migración:**
+   ```bash
+   mysql -u usuario -p nombre_db < update-skill-categories.sql
+   ```
+
+   O ejecutar manualmente:
+   ```sql
+   ALTER TABLE skills
+   MODIFY COLUMN category ENUM(
+     -- Tecnología (5)
+     'programming_languages',
+     'frameworks_libraries',
+     'databases',
+     'cloud_devops',
+     'mobile_development',
+     -- Diseño y Creatividad (3)
+     'design_tools',
+     'multimedia',
+     'graphic_design',
+     -- Negocios (4)
+     'project_management',
+     'business_analysis',
+     'marketing_digital',
+     'sales',
+     -- Finanzas (2)
+     'accounting',
+     'finance',
+     -- Otros Sectores (16)
+     'human_resources',
+     'healthcare',
+     'laboratory',
+     'teaching',
+     'legal',
+     'operations',
+     'logistics',
+     'architecture',
+     'engineering',
+     'communication',
+     'social_media',
+     'customer_service',
+     'office_tools',
+     'soft_skills',
+     'languages',
+     'other'
+   ) NOT NULL DEFAULT 'other' COMMENT 'Categoría de la habilidad (33 categorías disponibles)';
+   ```
+
+3. **Verificar:**
+   ```sql
+   SHOW CREATE TABLE skills;
+   SELECT DISTINCT category FROM skills;
+   ```
+
+**Archivo de migración incluido:** `update-skill-categories.sql` con instrucciones completas.
 
 ---
 

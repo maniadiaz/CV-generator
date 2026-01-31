@@ -524,7 +524,7 @@ const handleDragEnd = async (result: any) => {
       {
         "id": 1,
         "name": "AWS Certified Solutions Architect",
-        "issuer": "Amazon Web Services",
+        "issuing_organization": "Amazon Web Services",
         "issue_date": "2023-06-15",
         "expiration_date": "2026-06-15",
         "credential_id": "AWS-SA-12345",
@@ -547,7 +547,7 @@ const handleDragEnd = async (result: any) => {
 ```json
 {
   "name": "Google Cloud Professional Developer",
-  "issuer": "Google Cloud",
+  "issuing_organization": "Google Cloud",
   "issue_date": "2024-01-20",
   "expiration_date": "2026-01-20",
   "credential_id": "GCP-DEV-67890",
@@ -557,7 +557,7 @@ const handleDragEnd = async (result: any) => {
 
 **Campos:**
 - `name` (string, required): Nombre de la certificación
-- `issuer` (string, required): Emisor de la certificación
+- `issuing_organization` (string, required): Emisor de la certificación
 - `issue_date` (date, required): Fecha de emisión (formato: YYYY-MM-DD)
 - `expiration_date` (date, optional): Fecha de expiración (formato: YYYY-MM-DD)
 - `credential_id` (string, optional): ID de la credencial
@@ -567,7 +567,7 @@ const handleDragEnd = async (result: any) => {
 ```typescript
 interface CertificationCreate {
   name: string;
-  issuer: string;
+  issuing_organization: string;
   issue_date: string; // YYYY-MM-DD
   expiration_date?: string; // YYYY-MM-DD
   credential_id?: string;
