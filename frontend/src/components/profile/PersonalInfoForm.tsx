@@ -10,8 +10,19 @@ import {
   Alert,
   CircularProgress,
   Button,
+  alpha,
+  Fade,
+  InputAdornment,
 } from '@mui/material';
-import { Save as SaveIcon } from '@mui/icons-material';
+import { 
+  Save as SaveIcon,
+  Person as PersonIcon,
+  Email as EmailIcon,
+  Phone as PhoneIcon,
+  LocationOn as LocationIcon,
+  Work as WorkIcon,
+  Description as DescriptionIcon,
+} from '@mui/icons-material';
 import { personalInfoService } from '@api/personalInfoService';
 
 interface PersonalInfoFormProps {
@@ -124,19 +135,39 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)}>
-      {errorMessage && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {errorMessage}
-        </Alert>
-      )}
+      <Fade in={!!errorMessage} timeout={300}>
+        <Box>
+          {errorMessage && (
+            <Alert 
+              severity="error" 
+              sx={{ 
+                mb: 3,
+                borderRadius: 2,
+              }}
+            >
+              {errorMessage}
+            </Alert>
+          )}
+        </Box>
+      </Fade>
 
-      {successMessage && (
-        <Alert severity="success" sx={{ mb: 2 }}>
-          {successMessage}
-        </Alert>
-      )}
+      <Fade in={!!successMessage} timeout={300}>
+        <Box>
+          {successMessage && (
+            <Alert 
+              severity="success" 
+              sx={{ 
+                mb: 3,
+                borderRadius: 2,
+              }}
+            >
+              {successMessage}
+            </Alert>
+          )}
+        </Box>
+      </Fade>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         <Grid size={{ xs: 12, md: 6 }}>
           <Controller
             name="full_name"
@@ -148,6 +179,27 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
                 label={t('personalInfo.fullName')}
                 error={!!errors.full_name}
                 helperText={errors.full_name ? t(errors.full_name.message as string) : ''}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PersonIcon sx={{ color: 'text.secondary' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                    '&.Mui-focused': {
+                      boxShadow: (theme) => `0 0 0 3px ${alpha(theme.palette.primary.main, 0.1)}`,
+                    },
+                  },
+                }}
               />
             )}
           />
@@ -165,6 +217,27 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
                 type="email"
                 error={!!errors.email}
                 helperText={errors.email ? t(errors.email.message as string) : ''}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailIcon sx={{ color: 'text.secondary' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                    '&.Mui-focused': {
+                      boxShadow: (theme) => `0 0 0 3px ${alpha(theme.palette.primary.main, 0.1)}`,
+                    },
+                  },
+                }}
               />
             )}
           />
@@ -181,6 +254,27 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
                 label={t('personalInfo.phone')}
                 error={!!errors.phone}
                 helperText={errors.phone ? t(errors.phone.message as string) : ''}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <PhoneIcon sx={{ color: 'text.secondary' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                    '&.Mui-focused': {
+                      boxShadow: (theme) => `0 0 0 3px ${alpha(theme.palette.primary.main, 0.1)}`,
+                    },
+                  },
+                }}
               />
             )}
           />
@@ -197,6 +291,27 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
                 label={t('personalInfo.location')}
                 error={!!errors.location}
                 helperText={errors.location ? t(errors.location.message as string) : ''}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <LocationIcon sx={{ color: 'text.secondary' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                    '&.Mui-focused': {
+                      boxShadow: (theme) => `0 0 0 3px ${alpha(theme.palette.primary.main, 0.1)}`,
+                    },
+                  },
+                }}
               />
             )}
           />
@@ -214,6 +329,27 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
                 placeholder={t('personalInfo.professionalTitlePlaceholder')}
                 error={!!errors.professional_title}
                 helperText={errors.professional_title ? t(errors.professional_title.message as string) : ''}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <WorkIcon sx={{ color: 'text.secondary' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                    '&.Mui-focused': {
+                      boxShadow: (theme) => `0 0 0 3px ${alpha(theme.palette.primary.main, 0.1)}`,
+                    },
+                  },
+                }}
               />
             )}
           />
@@ -233,18 +369,56 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
                 placeholder={t('personalInfo.summaryPlaceholder')}
                 error={!!errors.summary}
                 helperText={errors.summary ? t(errors.summary.message as string) : ''}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start" sx={{ alignSelf: 'flex-start', mt: 2 }}>
+                      <DescriptionIcon sx={{ color: 'text.secondary' }} />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 2,
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      '& .MuiOutlinedInput-notchedOutline': {
+                        borderColor: 'primary.main',
+                      },
+                    },
+                    '&.Mui-focused': {
+                      boxShadow: (theme) => `0 0 0 3px ${alpha(theme.palette.primary.main, 0.1)}`,
+                    },
+                  },
+                }}
               />
             )}
           />
         </Grid>
 
         <Grid size={{ xs: 12 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
             <Button
               type="submit"
               variant="contained"
-              startIcon={<SaveIcon />}
+              size="large"
+              startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
               disabled={saving}
+              sx={{
+                borderRadius: 2,
+                px: 4,
+                py: 1.5,
+                fontWeight: 600,
+                textTransform: 'none',
+                boxShadow: (theme) => `0 4px 12px ${alpha(theme.palette.primary.main, 0.3)}`,
+                transition: 'all 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-2px)',
+                  boxShadow: (theme) => `0 6px 16px ${alpha(theme.palette.primary.main, 0.4)}`,
+                },
+                '&:disabled': {
+                  transform: 'none',
+                },
+              }}
             >
               {saving ? t('common.saving') : t('common.save')}
             </Button>
