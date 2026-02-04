@@ -18,10 +18,12 @@ import {
   DialogContentText,
   DialogActions,
   Chip,
+  alpha,
+  Tooltip,
+  Fade,
 } from '@mui/material';
 import {
   Add as AddIcon,
-  Edit as EditIcon,
   Delete as DeleteIcon,
   Visibility as PreviewIcon,
 } from '@mui/icons-material';
@@ -59,11 +61,6 @@ const ProfileList = () => {
     navigate(`/profiles/${id}/edit`);
   };
 
-  const handlePreviewProfile = (id: number) => {
-    // Redirect to templates-export page where user can preview and download CV
-    navigate(`/profiles/${id}/templates-export`);
-  };
-
   const handleDeleteClick = (id: number) => {
     setProfileToDelete(id);
     setDeleteDialogOpen(true);
@@ -90,7 +87,7 @@ const ProfileList = () => {
 
   if (loading) {
     return (
-      <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Container maxWidth="lg" sx={{ mt: 0, mb: 4, px: { xs: 2, sm: 3 } }}>
         <Box sx={{ width: '100%' }}>
           <LinearProgress />
         </Box>
@@ -99,115 +96,235 @@ const ProfileList = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h4">{t('dashboard.myProfiles')}</Typography>
+    <Container maxWidth="lg" sx={{ mt: 0, mb: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2, md: 3 } }}>
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        mb: { xs: 2, sm: 3, md: 4 },
+        flexDirection: { xs: 'column', sm: 'row' },
+        gap: { xs: 1.5, sm: 2 },
+      }}>
+        <Typography 
+          variant="h4" 
+          sx={{ 
+            fontWeight: 700,
+            fontSize: { xs: '1.35rem', sm: '1.75rem', md: '2rem' },
+            width: { xs: '100%', sm: 'auto' },
+            textAlign: { xs: 'center', sm: 'left' },
+          }}
+        >
+          {t('dashboard.myProfiles')}
+        </Typography>
         <Button
           variant="contained"
+          size="large"
           startIcon={<AddIcon />}
           onClick={handleCreateProfile}
+          sx={{
+            borderRadius: 2,
+            px: { xs: 2.5, sm: 3 },
+            py: { xs: 1.25, sm: 1.5 },
+            fontWeight: 600,
+            textTransform: 'none',
+            fontSize: { xs: '0.875rem', sm: '1rem' },
+            width: { xs: '100%', sm: 'auto' },
+            boxShadow: (theme) => `0 4px 12px ${alpha(theme.palette.primary.main, 0.3)}`,
+            transition: 'all 0.3s ease',
+            '&:hover': {
+              transform: 'translateY(-2px)',
+              boxShadow: (theme) => `0 6px 16px ${alpha(theme.palette.primary.main, 0.4)}`,
+            },
+          }}
         >
           {t('profile.newProfile')}
         </Button>
       </Box>
 
       {!profiles || profiles.length === 0 ? (
-        <Card>
-          <CardContent sx={{ textAlign: 'center', py: 8 }}>
-            <Typography variant="h6" color="text.secondary" gutterBottom>
-              {t('dashboard.noProfiles')}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              {t('dashboard.createFirstProfile')}
-            </Typography>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleCreateProfile}
-            >
-              {t('profile.newProfile')}
-            </Button>
-          </CardContent>
-        </Card>
+        <Fade in timeout={600}>
+          <Card 
+            elevation={0}
+            sx={{ 
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+            }}
+          >
+            <CardContent sx={{ textAlign: 'center', py: 10 }}>
+              <Box
+                sx={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+                  mx: 'auto',
+                  mb: 3,
+                }}
+              >
+                <AddIcon sx={{ fontSize: 40, color: 'primary.main' }} />
+              </Box>
+              <Typography variant="h5" fontWeight={600} gutterBottom>
+                {t('dashboard.noProfiles')}
+              </Typography>
+              <Typography variant="body1" color="text.secondary" sx={{ mb: 4, maxWidth: 400, mx: 'auto' }}>
+                {t('dashboard.createFirstProfile')}
+              </Typography>
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<AddIcon />}
+                onClick={handleCreateProfile}
+                sx={{
+                  borderRadius: 2,
+                  px: 4,
+                  py: 1.5,
+                  fontWeight: 600,
+                  textTransform: 'none',
+                }}
+              >
+                {t('profile.newProfile')}
+              </Button>
+            </CardContent>
+          </Card>
+        </Fade>
       ) : (
         <Grid container spacing={3}>
-          {Array.isArray(profiles) && profiles.map((profile) => (
+          {Array.isArray(profiles) && profiles.map((profile, index) => (
             <Grid key={profile.id} size={{ xs: 12, md: 6, lg: 4 }}>
-              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                    <Typography variant="h6" noWrap>
-                      {profile.name}
-                    </Typography>
-                    {profile.is_default && (
-                      <Chip label={t('profile.default')} size="small" color="primary" />
-                    )}
-                  </Box>
-
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    {profile.template}
-                  </Typography>
-
-                  <Box sx={{ mt: 2, mb: 1 }}>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                      <Typography variant="body2" color="text.secondary">
-                        {t('profile.completion')}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {profile.completion_percentage}%
-                      </Typography>
+              <Fade in timeout={400 + index * 100}>
+                <Card 
+                  elevation={0}
+                  onClick={() => handleEditProfile(profile.id)}
+                  sx={{ 
+                    height: '100%', 
+                    display: 'flex', 
+                    flexDirection: 'column',
+                    border: (theme) => `1px solid ${theme.palette.divider}`,
+                    borderRadius: 3,
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: (theme) => theme.shadows[12],
+                      borderColor: 'primary.main',
+                    },
+                  }}
+                >
+                  <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
+                      <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                        <Typography 
+                          variant="h6" 
+                          noWrap
+                          sx={{ 
+                            fontWeight: 600,
+                            mb: 0.5,
+                          }}
+                        >
+                          {profile.name}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {profile.template}
+                        </Typography>
+                      </Box>
+                      {profile.is_default && (
+                        <Chip 
+                          label={t('profile.default')} 
+                          size="small" 
+                          color="primary"
+                          sx={{ 
+                            fontWeight: 600,
+                            ml: 1,
+                          }}
+                        />
+                      )}
                     </Box>
-                    <LinearProgress
-                      variant="determinate"
-                      value={profile.completion_percentage}
-                      color={getCompletionColor(profile.completion_percentage)}
-                    />
-                  </Box>
 
-                  <Box sx={{ mt: 2, display: 'flex', gap: 1 }}>
-                    <Chip
-                      label={`${profile.download_count} ${t('profile.downloads')}`}
-                      size="small"
-                      variant="outlined"
-                    />
-                  </Box>
+                    <Box sx={{ mt: 3, mb: 2 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
+                        <Typography variant="body2" color="text.secondary" fontWeight={500}>
+                          {t('profile.completion')}
+                        </Typography>
+                        <Typography 
+                          variant="body2" 
+                          fontWeight={700}
+                          color={getCompletionColor(profile.completion_percentage) + '.main'}
+                        >
+                          {profile.completion_percentage}%
+                        </Typography>
+                      </Box>
+                      <LinearProgress
+                        variant="determinate"
+                        value={profile.completion_percentage}
+                        color={getCompletionColor(profile.completion_percentage)}
+                        sx={{
+                          height: 8,
+                          borderRadius: 4,
+                          bgcolor: (theme) => alpha(theme.palette.grey[500], 0.1),
+                        }}
+                      />
+                    </Box>
 
-                  <Typography variant="caption" color="text.secondary" sx={{ mt: 2, display: 'block' }}>
-                    {t('profile.lastUpdated')}: {format(new Date(profile.updated_at), 'PPp', { locale: dateLocale })}
-                  </Typography>
-                </CardContent>
+                    <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'center' }}>
+                      <Chip
+                        icon={<PreviewIcon sx={{ fontSize: 16 }} />}
+                        label={`${profile.download_count} ${t('profile.downloads')}`}
+                        size="small"
+                        variant="outlined"
+                        sx={{ fontWeight: 500 }}
+                      />
+                    </Box>
 
-                <CardActions sx={{ justifyContent: 'space-between', px: 2, pb: 2 }}>
-                  <Box>
-                    <IconButton
-                      size="small"
-                      color="primary"
-                      onClick={() => handleEditProfile(profile.id)}
-                      title={t('profile.editProfile')}
+                    <Typography 
+                      variant="caption" 
+                      color="text.secondary" 
+                      sx={{ 
+                        mt: 2, 
+                        display: 'block',
+                        fontSize: '0.75rem',
+                      }}
                     >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      color="info"
-                      onClick={() => handlePreviewProfile(profile.id)}
-                      title={t('profile.preview')}
-                    >
-                      <PreviewIcon />
-                    </IconButton>
-                  </Box>
-                  <Box>
-                    <IconButton
-                      size="small"
-                      color="error"
-                      onClick={() => handleDeleteClick(profile.id)}
-                      title={t('profile.deleteProfile')}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Box>
-                </CardActions>
-              </Card>
+                      {t('profile.lastUpdated')}: {format(new Date(profile.updated_at), 'PPp', { locale: dateLocale })}
+                    </Typography>
+                  </CardContent>
+
+                  <CardActions 
+                    sx={{ 
+                      justifyContent: 'flex-end', 
+                      px: 3, 
+                      pb: 3,
+                      pt: 2,
+                      borderTop: (theme) => `1px solid ${theme.palette.divider}`,
+                      mt: 2,
+                    }}
+                  >
+                    <Tooltip title={t('profile.deleteProfile')} arrow>
+                      <IconButton
+                        size="medium"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDeleteClick(profile.id);
+                        }}
+                        sx={{
+                          bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
+                          color: 'error.main',
+                          transition: 'all 0.3s ease',
+                          '&:hover': {
+                            bgcolor: 'error.main',
+                            color: 'error.contrastText',
+                            transform: 'scale(1.1)',
+                          },
+                        }}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </CardActions>
+                </Card>
+              </Fade>
             </Grid>
           ))}
         </Grid>

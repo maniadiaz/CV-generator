@@ -10,6 +10,7 @@ import {
   LinearProgress,
   Alert,
   Grid,
+  Fade,
 } from '@mui/material';
 import {
   ArrowBack as BackIcon,
@@ -84,96 +85,142 @@ const ProfileEdit = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Button
-            startIcon={<BackIcon />}
-            onClick={handleBack}
-            sx={{ mr: 2 }}
+    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, px: { xs: 2, sm: 3 } }}>
+      <Fade in timeout={400}>
+        <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 4, flexWrap: 'wrap', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Button
+                startIcon={<BackIcon />}
+                onClick={handleBack}
+                variant="outlined"
+                sx={{ 
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  fontWeight: 600,
+                }}
+              >
+                {t('common.back')}
+              </Button>
+              <Typography 
+                variant="h4" 
+                sx={{ 
+                  fontWeight: 700,
+                  fontSize: { xs: '1.5rem', sm: '2rem' },
+                }}
+              >
+                {currentProfile.name}
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Completion Progress Card */}
+          <ProfileCompletionCard
+            completionPercentage={currentProfile.completion_percentage || 0}
+          />
+
+          {/* Personal Info Section */}
+          <Paper 
+            elevation={0}
+            sx={{ 
+              p: { xs: 2, sm: 3 }, 
+              mb: 4,
+              border: (theme) => `1px solid ${theme.palette.divider}`,
+              borderRadius: 3,
+              transition: 'all 0.3s ease',
+              '&:hover': {
+                boxShadow: (theme) => theme.shadows[4],
+              },
+            }}
           >
-            {t('common.back')}
-          </Button>
-          <Typography variant="h4">{currentProfile.name}</Typography>
+            <Typography 
+              variant="h5" 
+              gutterBottom
+              sx={{ 
+                fontWeight: 700,
+                mb: 3,
+                pb: 2,
+                borderBottom: (theme) => `2px solid ${theme.palette.primary.main}`,
+              }}
+            >
+              {t('personalInfo.title')}
+            </Typography>
+            <PersonalInfoForm
+              profileId={currentProfile.id}
+              onSaveSuccess={handleSaveSuccess}
+            />
+          </Paper>
+
+          {/* CV Sections Cards */}
+          <Typography 
+            variant="h5" 
+            gutterBottom 
+            sx={{ 
+              mt: 2, 
+              mb: 3,
+              fontWeight: 700,
+            }}
+          >
+            {t('profile.cvSections')}
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+              <SectionCard
+                title={t('experience.title')}
+                description={t('experience.sectionDescription')}
+                icon={WorkIcon}
+                path={`/profiles/${id}/experience`}
+                color="primary"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+              <SectionCard
+                title={t('education.title')}
+                description={t('education.sectionDescription')}
+                icon={SchoolIcon}
+                path={`/profiles/${id}/education`}
+                color="success"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+              <SectionCard
+                title={t('skills.title')}
+                description={t('skills.sectionDescription')}
+                icon={SkillsIcon}
+                path={`/profiles/${id}/skills`}
+                color="info"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+              <SectionCard
+                title={t('languages.title')}
+                description={t('languages.sectionDescription')}
+                icon={LanguageIcon}
+                path={`/profiles/${id}/languages`}
+                color="warning"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+              <SectionCard
+                title={t('certificates.title')}
+                description={t('certificates.sectionDescription')}
+                icon={CertificateIcon}
+                path={`/profiles/${id}/certifications`}
+                color="secondary"
+              />
+            </Grid>
+            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+              <SectionCard
+                title={t('socialNetworks.title')}
+                description={t('socialNetworks.sectionDescription')}
+                icon={SocialIcon}
+                path={`/profiles/${id}/social-networks`}
+                color="primary"
+              />
+            </Grid>
+          </Grid>
         </Box>
-      </Box>
-
-      {/* Completion Progress Card */}
-      <ProfileCompletionCard
-        completionPercentage={currentProfile.completion_percentage || 0}
-      />
-
-      {/* Personal Info Section */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          {t('personalInfo.title')}
-        </Typography>
-        <PersonalInfoForm
-          profileId={currentProfile.id}
-          onSaveSuccess={handleSaveSuccess}
-        />
-      </Paper>
-
-      {/* CV Sections Cards */}
-      <Typography variant="h5" gutterBottom sx={{ mt: 4, mb: 2 }}>
-        {t('profile.cvSections')}
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <SectionCard
-            title={t('experience.title')}
-            description={t('experience.sectionDescription')}
-            icon={WorkIcon}
-            path={`/profiles/${id}/experience`}
-            color="primary"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <SectionCard
-            title={t('education.title')}
-            description={t('education.sectionDescription')}
-            icon={SchoolIcon}
-            path={`/profiles/${id}/education`}
-            color="success"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <SectionCard
-            title={t('skills.title')}
-            description={t('skills.sectionDescription')}
-            icon={SkillsIcon}
-            path={`/profiles/${id}/skills`}
-            color="info"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <SectionCard
-            title={t('languages.title')}
-            description={t('languages.sectionDescription')}
-            icon={LanguageIcon}
-            path={`/profiles/${id}/languages`}
-            color="warning"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <SectionCard
-            title={t('certificates.title')}
-            description={t('certificates.sectionDescription')}
-            icon={CertificateIcon}
-            path={`/profiles/${id}/certifications`}
-            color="secondary"
-          />
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-          <SectionCard
-            title={t('socialNetworks.title')}
-            description={t('socialNetworks.sectionDescription')}
-            icon={SocialIcon}
-            path={`/profiles/${id}/social-networks`}
-            color="primary"
-          />
-        </Grid>
-      </Grid>
+      </Fade>
     </Container>
   );
 };
