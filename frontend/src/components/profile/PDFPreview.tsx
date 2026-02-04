@@ -88,7 +88,7 @@ export default function PDFPreview({ profileId }: PDFPreviewProps) {
 
     if (validation.warnings.length > 0) {
       const proceed = window.confirm(
-        t('pdf.confirmExport', { completeness: validation.completeness })
+        t('pdf.confirmExport', { completeness: 100 })
       );
       if (!proceed) {
         return;
@@ -159,10 +159,6 @@ export default function PDFPreview({ profileId }: PDFPreviewProps) {
                 ? t('pdf.validProfile')
                 : t('pdf.invalidProfile')}
             </strong>
-            <Box sx={{ mt: 1 }}>
-              {t('pdf.completeness')}: {validation.completeness}%
-            </Box>
-
             {validation.warnings.length > 0 && (
               <Box sx={{ mt: 1 }}>
                 <strong>{t('pdf.warnings')}:</strong>
