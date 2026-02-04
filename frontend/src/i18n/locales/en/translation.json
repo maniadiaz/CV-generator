@@ -38,6 +38,8 @@
     "forgotPassword": "Forgot your password?",
     "resetPassword": "Reset password",
     "verifyEmail": "Verify email",
+    "welcomeBack": "Welcome back",
+    "createAccount": "Create your account",
     "dontHaveAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",
     "emailRequired": "Email is required",
