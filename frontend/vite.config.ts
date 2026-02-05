@@ -8,7 +8,8 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'prompt',
+      injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
         name: 'CV Generator',
@@ -37,6 +38,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        cleanupOutdatedCaches: true,
+        skipWaiting: true,
+        clientsClaim: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/api-cv\.servercontrol-mzt\.com\/api\/.*/i,
@@ -49,7 +53,8 @@ export default defineConfig({
               },
               cacheableResponse: {
                 statuses: [0, 200]
-              }
+              },
+              networkTimeoutSeconds: 10
             }
           }
         ]

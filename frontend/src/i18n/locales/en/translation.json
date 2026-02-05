@@ -13,10 +13,10 @@
     "success": "Success",
     "email": "Email",
     "password": "Password",
-    "confirmPassword": "Confirm Password",
+    "confirmPassword": "Confirm password",
     "name": "Name",
-    "firstName": "First Name",
-    "lastName": "Last Name",
+    "firstName": "First name",
+    "lastName": "Last name",
     "language": "Language",
     "theme": "Theme",
     "darkMode": "Dark mode",
@@ -29,7 +29,14 @@
     "none": "None",
     "close": "Close",
     "show": "Show",
-    "hide": "Hide"
+    "hide": "Hide",
+    "next": "Next"
+  },
+  "pwa": {
+    "offlineReady": "App ready to work offline",
+    "updateAvailable": "New version available",
+    "updateNow": "Update now",
+    "autoUpdating": "Auto-updating in 3 seconds..."
   },
   "auth": {
     "login": "Login",

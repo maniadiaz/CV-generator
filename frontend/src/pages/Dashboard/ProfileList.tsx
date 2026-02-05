@@ -26,6 +26,8 @@ import {
   Add as AddIcon,
   Delete as DeleteIcon,
   Visibility as PreviewIcon,
+  Edit as EditIcon,
+  FileDownload as ExportIcon,
 } from '@mui/icons-material';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
@@ -33,6 +35,7 @@ import { fetchProfiles, deleteProfile } from '@redux/slices/profileSlice';
 import { format } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
 import CreateProfileDialog from '@components/profile/CreateProfileDialog';
+import ExportModal from '@components/profile/ExportModal';
 
 const ProfileList = () => {
   const { t, i18n } = useTranslation();
@@ -42,6 +45,8 @@ const ProfileList = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [profileToDelete, setProfileToDelete] = useState<number | null>(null);
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [exportModalOpen, setExportModalOpen] = useState(false);
+  const [profileToExport, setProfileToExport] = useState<number | null>(null);
 
   const dateLocale = i18n.language === 'es' ? es : enUS;
 
@@ -77,6 +82,16 @@ const ProfileList = () => {
   const handleDeleteCancel = () => {
     setDeleteDialogOpen(false);
     setProfileToDelete(null);
+  };
+
+  const handleExportClick = (id: number) => {
+    setProfileToExport(id);
+    setExportModalOpen(true);
+  };
+
+  const handleCloseExportModal = () => {
+    setExportModalOpen(false);
+    setProfileToExport(null);
   };
 
   const getCompletionColor = (percentage: number) => {
@@ -197,7 +212,6 @@ const ProfileList = () => {
               <Fade in timeout={400 + index * 100}>
                 <Card 
                   elevation={0}
-                  onClick={() => handleEditProfile(profile.id)}
                   sx={{ 
                     height: '100%', 
                     display: 'flex', 
@@ -205,10 +219,9 @@ const ProfileList = () => {
                     border: (theme) => `1px solid ${theme.palette.divider}`,
                     borderRadius: 3,
                     transition: 'all 0.3s ease',
-                    cursor: 'pointer',
                     '&:hover': {
-                      transform: 'translateY(-8px)',
-                      boxShadow: (theme) => theme.shadows[12],
+                      transform: 'translateY(-4px)',
+                      boxShadow: (theme) => theme.shadows[8],
                       borderColor: 'primary.main',
                     },
                   }}
@@ -293,35 +306,72 @@ const ProfileList = () => {
 
                   <CardActions 
                     sx={{ 
-                      justifyContent: 'flex-end', 
+                      justifyContent: 'space-between', 
                       px: 3, 
                       pb: 3,
                       pt: 2,
                       borderTop: (theme) => `1px solid ${theme.palette.divider}`,
-                      mt: 2,
+                      gap: 1,
                     }}
                   >
-                    <Tooltip title={t('profile.deleteProfile')} arrow>
+                    <Tooltip title={t('profile.exportPDF')} arrow>
                       <IconButton
                         size="medium"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDeleteClick(profile.id);
-                        }}
+                        onClick={() => handleExportClick(profile.id)}
                         sx={{
-                          bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
-                          color: 'error.main',
+                          bgcolor: (theme) => alpha(theme.palette.success.main, 0.1),
+                          color: 'success.main',
                           transition: 'all 0.3s ease',
                           '&:hover': {
-                            bgcolor: 'error.main',
-                            color: 'error.contrastText',
+                            bgcolor: 'success.main',
+                            color: 'success.contrastText',
                             transform: 'scale(1.1)',
                           },
                         }}
                       >
-                        <DeleteIcon fontSize="small" />
+                        <ExportIcon fontSize="small" />
                       </IconButton>
                     </Tooltip>
+
+                    <Box sx={{ display: 'flex', gap: 1 }}>
+                      <Tooltip title={t('common.edit')} arrow>
+                        <IconButton
+                          size="medium"
+                          onClick={() => handleEditProfile(profile.id)}
+                          sx={{
+                            bgcolor: (theme) => alpha(theme.palette.primary.main, 0.1),
+                            color: 'primary.main',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                              bgcolor: 'primary.main',
+                              color: 'primary.contrastText',
+                              transform: 'scale(1.1)',
+                            },
+                          }}
+                        >
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+
+                      <Tooltip title={t('profile.deleteProfile')} arrow>
+                        <IconButton
+                          size="medium"
+                          onClick={() => handleDeleteClick(profile.id)}
+                          sx={{
+                            bgcolor: (theme) => alpha(theme.palette.error.main, 0.1),
+                            color: 'error.main',
+                            transition: 'all 0.3s ease',
+                            '&:hover': {
+                              bgcolor: 'error.main',
+                              color: 'error.contrastText',
+                              transform: 'scale(1.1)',
+                            },
+                          }}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
                   </CardActions>
                 </Card>
               </Fade>
@@ -334,6 +384,14 @@ const ProfileList = () => {
         open={createDialogOpen}
         onClose={handleCloseCreateDialog}
       />
+
+      {profileToExport && (
+        <ExportModal
+          open={exportModalOpen}
+          onClose={handleCloseExportModal}
+          profileId={profileToExport}
+        />
+      )}
 
       <Dialog
         open={deleteDialogOpen}
