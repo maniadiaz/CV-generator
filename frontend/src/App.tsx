@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, useLocation } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import { SnackbarProvider } from 'notistack';
@@ -9,7 +9,19 @@ import { checkAuth } from '@redux/slices/authSlice';
 import { lightTheme, darkTheme } from '@theme/theme';
 import AppRoutes from '@routes/AppRoutes';
 import PWAUpdatePrompt from '@components/common/PWAUpdatePrompt';
+import { initGA, logPageView } from '@utils/analytics';
 import '@i18n/config';
+
+// Componente para rastrear cambios de ruta
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    logPageView();
+  }, [location]);
+
+  return null;
+}
 
 function App() {
   const dispatch = useAppDispatch();
@@ -18,6 +30,8 @@ function App() {
 
   useEffect(() => {
     dispatch(checkAuth());
+    // Inicializar Google Analytics
+    initGA();
   }, [dispatch]);
 
   return (
@@ -25,6 +39,7 @@ function App() {
       <CssBaseline />
       <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
         <BrowserRouter>
+          <AnalyticsTracker />
           <AppRoutes />
           <PWAUpdatePrompt />
         </BrowserRouter>
