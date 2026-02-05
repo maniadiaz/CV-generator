@@ -42,8 +42,8 @@ interface PersonalInfoFormData {
 const schema = yup.object({
   full_name: yup.string().required('common.nameRequired'),
   email: yup.string().email('auth.emailInvalid').required('auth.emailRequired'),
-  phone: yup.string().required('personalInfo.phoneRequired'),
-  location: yup.string().required('personalInfo.locationRequired'),
+  phone: yup.string().default(''),
+  location: yup.string().default(''),
   professional_title: yup.string().default(''),
   summary: yup.string().default(''),
 });
@@ -60,6 +60,7 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
   } = useForm<PersonalInfoFormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -71,6 +72,10 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
       summary: '',
     },
   });
+
+  // Watch all form fields to check if any has content
+  const formValues = watch();
+  const hasAnyContent = Object.values(formValues).some(value => value && value.trim() !== '');
 
   // Load personal info
   useEffect(() => {
@@ -114,7 +119,18 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
       setSaving(true);
       setErrorMessage(null);
       setSuccessMessage(null);
-      await personalInfoService.updatePersonalInfo(profileId, data);
+      
+      // Limpiar espacios en blanco pero mantener todos los campos (enviar string vacío si está vacío)
+      const cleanedData: PersonalInfoFormData = {
+        full_name: data.full_name?.trim() || '',
+        email: data.email?.trim() || '',
+        phone: data.phone?.trim() || '',
+        location: data.location?.trim() || '',
+        professional_title: data.professional_title?.trim() || '',
+        summary: data.summary?.trim() || '',
+      };
+      
+      await personalInfoService.updatePersonalInfo(profileId, cleanedData);
       setSuccessMessage(t('profile.saveSuccess'));
       onSaveSuccess?.();
       setTimeout(() => setSuccessMessage(null), 3000);
@@ -402,7 +418,7 @@ const PersonalInfoForm = ({ profileId, onSaveSuccess }: PersonalInfoFormProps) =
               variant="contained"
               size="large"
               startIcon={saving ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
-              disabled={saving}
+              disabled={saving || !hasAnyContent}
               sx={{
                 borderRadius: 2,
                 px: 4,
