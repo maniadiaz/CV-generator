@@ -48,7 +48,7 @@ const Dashboard = () => {
 
   return (
     <Box sx={{ width: '100%', overflow: 'hidden', minHeight: 'calc(100vh - 64px)' }}>
-      <Container maxWidth="lg" sx={{ mt: { xs: 2, sm: 4 }, mb: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 3 } }}>
+      <Container maxWidth="lg" sx={{ mt: { xs: 2 }, mb: { xs: 2, sm: 4 }, px: { xs: 1.5, sm: 2 } }}>
         <Paper 
           elevation={0}
           sx={{ 
