@@ -8,13 +8,11 @@ import {
   CardContent,
   Paper,
   alpha,
-  CardActionArea,
 } from '@mui/material';
 import {
   Folder as FolderIcon,
   TrendingUp as TrendingIcon,
   Download as DownloadIcon,
-  ArrowForward as ArrowIcon,
 } from '@mui/icons-material';
 import { useAppSelector } from '@hooks/useAppSelector';
 import { useAppDispatch } from '@hooks/useAppDispatch';
@@ -47,14 +45,6 @@ const Dashboard = () => {
     const count = Number(p.download_count);
     return sum + (isNaN(count) ? 0 : count);
   }, 0);
-
-  const handleProfilesClick = () => {
-    // Scroll to profiles section
-    const profilesSection = document.getElementById('profiles-section');
-    if (profilesSection) {
-      profilesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
 
   return (
     <Box sx={{ width: '100%', overflow: 'hidden', minHeight: 'calc(100vh - 64px)' }}>
@@ -112,8 +102,6 @@ const Dashboard = () => {
               position: 'relative',
               overflow: 'hidden',
               transition: 'all 0.3s ease',
-              border: (theme) => `1px solid ${theme.palette.divider}`,
-              cursor: 'pointer',
               '&:hover': {
                 transform: 'translateY(-4px)',
                 boxShadow: (theme) => theme.shadows[8],
@@ -134,7 +122,7 @@ const Dashboard = () => {
               },
             }}
           >
-            <CardActionArea onClick={handleProfilesClick}>
+            <Card>
               <CardContent sx={{ p: 3 }}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
                   <Typography variant="body2" color="text.secondary" fontWeight={600}>
@@ -157,28 +145,8 @@ const Dashboard = () => {
                 <Typography variant="h3" fontWeight={700} color="primary" sx={{ mb: 2 }}>
                   {totalProfiles}
                 </Typography>
-                <Box
-                  className="view-profiles-btn"
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 0.5,
-                    opacity: 0.7,
-                    transform: 'translateY(4px)',
-                    transition: 'all 0.3s ease',
-                    textTransform: 'none',
-                    fontWeight: 600,
-                    color: 'primary.main',
-                    fontSize: '0.875rem',
-                  }}
-                >
-                  <Typography variant="body2" fontWeight={600} color="primary.main">
-                    {t('dashboard.viewProfiles') || 'Ver perfiles'}
-                  </Typography>
-                  <ArrowIcon sx={{ fontSize: 18 }} />
-                </Box>
               </CardContent>
-            </CardActionArea>
+            </Card>
           </Card>
 
           <Card 

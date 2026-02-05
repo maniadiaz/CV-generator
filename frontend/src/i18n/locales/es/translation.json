@@ -29,7 +29,14 @@
     "none": "Ninguno",
     "close": "Cerrar",
     "show": "Mostrar",
-    "hide": "Ocultar"
+    "hide": "Ocultar",
+    "next": "Siguiente"
+  },
+  "pwa": {
+    "offlineReady": "App lista para funcionar sin conexión",
+    "updateAvailable": "Nueva versión disponible",
+    "updateNow": "Actualizar ahora",
+    "autoUpdating": "Actualizando automáticamente en 3 segundos..."
   },
   "auth": {
     "login": "Iniciar sesión",
