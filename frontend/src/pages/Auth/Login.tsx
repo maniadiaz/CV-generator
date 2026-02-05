@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { analyticsEvents } from '@utils/analytics';
 import {
   Box,
   Button,
@@ -94,10 +95,14 @@ const Login = () => {
       setError(null);
       const result = await dispatch(login(data)).unwrap();
       if (result) {
+        // Track successful login
+        analyticsEvents.login('email');
         navigate('/dashboard');
       }
     } catch (err: any) {
       setError(err || t('auth.loginError'));
+      // Track login error
+      analyticsEvents.error('Login Error', err || 'Unknown error');
     }
   };
 
