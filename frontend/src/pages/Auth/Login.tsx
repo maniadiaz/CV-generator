@@ -140,7 +140,6 @@ const Login = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
-                mb: 3,
               }}
             >
               <Box
@@ -148,9 +147,8 @@ const Login = () => {
                 src={AppIconSvg}
                 alt="CV Generator"
                 sx={{
-                  width: { xs: 60, sm: 70 },
-                  height: { xs: 60, sm: 70 },
-                  mb: 2,
+                  width: { xs: 70, sm: 200 },
+                  height: { xs: 70, sm: 200 },
                   animation: 'pulse 2s ease-in-out infinite',
                   '@keyframes pulse': {
                     '0%, 100%': { transform: 'scale(1)' },
