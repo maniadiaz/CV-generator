@@ -11,11 +11,6 @@ import {
   DialogActions,
   Button,
   TextField,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Box,
   CircularProgress,
   Alert,
@@ -30,12 +25,10 @@ interface CreateProfileDialogProps {
 
 interface CreateProfileFormData {
   name: string;
-  template: string;
 }
 
 const schema = yup.object({
   name: yup.string().required('profile.profileNameRequired').min(3, 'profile.profileNameMin'),
-  template: yup.string().required('profile.templateRequired'),
 });
 
 const CreateProfileDialog = ({ open, onClose }: CreateProfileDialogProps) => {
@@ -53,14 +46,18 @@ const CreateProfileDialog = ({ open, onClose }: CreateProfileDialogProps) => {
     resolver: yupResolver(schema),
     defaultValues: {
       name: '',
-      template: 'harvard_classic',
     },
   });
 
   const onSubmit = async (data: CreateProfileFormData) => {
     try {
       setError(null);
-      const profile = await dispatch(createProfile(data)).unwrap();
+      // Agregar plantilla Harvard Classic por defecto
+      const profileData = {
+        ...data,
+        template: 'harvard_classic',
+      };
+      const profile = await dispatch(createProfile(profileData)).unwrap();
       reset();
       onClose();
       // Redirect to edit page
@@ -99,46 +96,9 @@ const CreateProfileDialog = ({ open, onClose }: CreateProfileDialogProps) => {
                 error={!!errors.name}
                 helperText={errors.name ? t(errors.name.message as string) : ''}
                 autoFocus
-                sx={{ mb: 3 }}
               />
             )}
           />
-
-          <FormControl component="fieldset" fullWidth>
-            <FormLabel component="legend">{t('profile.selectTemplate')}</FormLabel>
-            <Controller
-              name="template"
-              control={control}
-              render={({ field }) => (
-                <RadioGroup {...field}>
-                  <FormControlLabel
-                    value="harvard_classic"
-                    control={<Radio />}
-                    label={
-                      <Box>
-                        <Box fontWeight="medium">{t('profile.templates.harvardClassic')}</Box>
-                        <Box fontSize="0.875rem" color="text.secondary">
-                          {t('profile.templates.harvardClassicDesc')}
-                        </Box>
-                      </Box>
-                    }
-                  />
-                  <FormControlLabel
-                    value="harvard_modern"
-                    control={<Radio />}
-                    label={
-                      <Box>
-                        <Box fontWeight="medium">{t('profile.templates.harvardModern')}</Box>
-                        <Box fontSize="0.875rem" color="text.secondary">
-                          {t('profile.templates.harvardModernDesc')}
-                        </Box>
-                      </Box>
-                    }
-                  />
-                </RadioGroup>
-              )}
-            />
-          </FormControl>
         </Box>
       </DialogContent>
       <DialogActions>
